@@ -43,13 +43,7 @@
                 { id: 'F5.1', section: '3. Resiliencia', name: 'Validación de Respaldo Inmutable', start: '2026-04-13', end: '2026-04-19', priority: 'CRÍTICA', ref: 'ANCI Inst. 4', instrument: 'Acta Pruebas', goal: 'Acta de restauración exitosa.', desc: 'Pruebas reales de recuperación desde copias inmutables.' },
                 { id: 'F5.2.a', section: '3. Resiliencia', name: 'Protocolo Institucional de Modo Papel', start: '2026-04-20', end: '2026-04-24', priority: 'Alta', ref: 'ANCI Inst. 4', instrument: 'Protocolo', goal: 'Kits físicos distribuidos.', desc: 'Instructivo clínico para operar sin sistemas informáticos.' },
                 { id: 'F5.2', section: '3. Resiliencia', name: 'Simulacro de Continuidad "Modo Papel"', start: '2026-04-25', end: '2026-04-30', priority: 'Alta', ref: 'ANCI Inst. 4', instrument: 'Inf. Simulacro', goal: 'Informe con lecciones aprendidas.', desc: 'Ejercicio físico en Urgencia/UCI para validar atención manual.' },
-                { id: 'F5.2.b', section: '3. Resiliencia', name: 'Validación de Resiliencia y Backup', start: '2026-04-25', end: '2026-04-30', priority: 'Alta', ref: 'ANCI Inst. 4', instrument: 'Acta Pruebas', goal: 'Acta de restauración Bare Metal.', desc: 'Restauración completa de sistemas en ambiente de contingencia.' },
-                { id: 'F1.1', section: '2. Gobernanza y Cumplimiento', name: 'Comité de Seguridad Trimestral Q1', start: '2026-04-20', end: '2026-04-30', priority: 'Media', ref: '-', instrument: 'Acta Comité', goal: 'Acta de sesión firmada.', desc: 'Reunión directiva para evaluar avances y asignar presupuesto.' },
-                { id: 'F2.6', section: '5. Gestión de Activos', name: 'Clasificación de Datos Sensibles', start: '2026-05-04', end: '2026-05-17', priority: 'Media', ref: 'Ley Prot. Datos', instrument: 'Inv. Datos', goal: 'Inventario de datos clasificado.', desc: 'Categorización de bases de datos clínicas y administrativas.' },
-                { id: 'F3.9', section: '7. Controles Técnicos', name: 'Hardening de Servidores Críticos', start: '2026-05-18', end: '2026-05-31', priority: 'Alta', ref: '-', instrument: 'Checklist CIS', goal: 'Reporte de cumplimiento Hardening.', desc: 'Configuración restrictiva de servidores de producción.' },
-                { id: 'F4.1', section: '8. Infraestructura', name: 'Micro-segmentación Red Biomédica', start: '2026-06-01', end: '2026-06-30', priority: 'Alta', ref: '-', instrument: 'Planos Red', goal: 'VLANs aisladas y validadas.', desc: 'Aislamiento de equipos médicos para evitar propagación lateral.' },
-                { id: 'F4.5', section: '8. Infraestructura', name: 'Cifrado de Datos en Reposo', start: '2026-07-01', end: '2026-07-15', priority: 'Media', ref: '-', instrument: 'Cert. Cifrado', goal: 'Unidades de storage cifradas.', desc: 'Protección de datos en storage ante acceso físico no autorizado.' },
-                { id: 'F3.6', section: '4. Protección', name: 'Hacking Ético Anual (Pentesting)', start: '2026-08-01', end: '2026-08-31', priority: 'Alta', ref: 'Res. 850', instrument: 'LC02', goal: 'Informe final de Pentesting.', desc: 'Simulación de ataques para detectar vulnerabilidades en el RCE.' }
+                { id: 'F5.2.b', section: '3. Resiliencia', name: 'Validación de Resiliencia y Backup', start: '2026-04-25', end: '2026-04-30', priority: 'Alta', ref: 'ANCI Inst. 4', instrument: 'Acta Pruebas', goal: 'Acta de restauración Bare Metal.', desc: 'Restauración completa de sistemas en ambiente de contingencia.' }
             ];
 
             const sections = ['Todos', 'ANCI Urgente', ...new Set(activities.map(a => a.section))].sort();
@@ -68,19 +62,19 @@
                                 <i className="fas fa-shield-alt text-3xl"></i>
                             </div>
                             <div>
-                                <h1 className="text-3xl font-black text-slate-900 tracking-tight">HOSMET: Roadmap Ciberseguridad 2026</h1>
-                                <p className="text-slate-500 text-lg font-medium">Visualización de Control Normativo • Basado en PO01 v2.2</p>
+                                <h1 className="text-4xl font-black text-slate-900 tracking-tight">HOSMET: Roadmap 2026</h1>
+                                <p className="text-slate-500 text-xl font-medium italic">Gestión de Control Normativo PO01 v2.2</p>
                             </div>
                         </div>
                     </header>
 
-                    {/* Filtros - FUENTE AUMENTADA */}
-                    <div className="flex flex-wrap gap-3 mb-10 bg-white p-3 rounded-2xl border border-slate-200 shadow-md">
+                    {/* Filtros - FUENTE IGUALADA AL CONTENIDO (text-lg + bold) */}
+                    <div className="flex flex-wrap gap-4 mb-10 bg-white p-4 rounded-2xl border border-slate-200 shadow-lg">
                         {sections.map(s => (
                             <button 
                                 key={s}
                                 onClick={() => setFilter(s)}
-                                className={`px-6 py-3 rounded-xl text-sm font-bold transition-all ${filter === s ? 'bg-slate-900 text-white shadow-lg scale-105' : 'text-slate-600 hover:bg-slate-100'}`}
+                                className={`px-6 py-3 rounded-xl text-lg font-black transition-all ${filter === s ? 'bg-blue-600 text-white shadow-md scale-105' : 'bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-600 border border-transparent hover:border-blue-200'}`}
                             >
                                 {s.includes('.') ? s.split('. ')[1] : s}
                             </button>
@@ -88,7 +82,7 @@
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                        {/* Columna Lista - TEXTO MÁS GRANDE */}
+                        {/* Columna Lista */}
                         <div className="lg:col-span-2 space-y-5 max-h-[75vh] overflow-y-auto pr-4 custom-scroll">
                             {getFiltered().map(act => (
                                 <div 
@@ -97,61 +91,61 @@
                                     className={`p-6 bg-white rounded-2xl border transition-all cursor-pointer group flex items-center justify-between ${selectedTask?.id === act.id ? 'border-blue-500 ring-4 ring-blue-50 shadow-lg translate-x-2' : 'border-slate-200 hover:border-blue-300 shadow-sm'}`}
                                 >
                                     <div className="flex gap-5 items-center">
-                                        <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-sm font-black ${act.priority === 'CRÍTICA' ? 'bg-red-100 text-red-600' : 'bg-blue-50 text-blue-600'}`}>
+                                        <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-lg font-black ${act.priority === 'CRÍTICA' ? 'bg-red-100 text-red-600 border border-red-200' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>
                                             {act.id}
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">{act.name}</h3>
+                                            <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors uppercase tracking-tight">{act.name}</h3>
                                             <div className="flex gap-4 mt-2 items-center">
-                                                <span className="text-xs text-slate-400 font-black uppercase tracking-widest">{act.start}</span>
+                                                <span className="text-xs text-slate-500 font-bold bg-slate-100 px-2 py-1 rounded tracking-widest">{act.start}</span>
                                                 {act.priority === 'CRÍTICA' && <span className="text-[10px] bg-red-600 text-white px-2 py-1 rounded-md font-black animate-pulse">ALTA CRITICIDAD</span>}
                                             </div>
                                         </div>
                                     </div>
-                                    <i className={`fas fa-chevron-right transition-transform ${selectedTask?.id === act.id ? 'text-blue-500 translate-x-1' : 'text-slate-300'}`}></i>
+                                    <i className={`fas fa-chevron-right transition-transform text-xl ${selectedTask?.id === act.id ? 'text-blue-500 translate-x-1' : 'text-slate-300'}`}></i>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Columna Detalle - DISEÑO MÁS AMPLIO */}
+                        {/* Columna Detalle */}
                         <div className="lg:col-span-1">
                             {selectedTask ? (
-                                <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden sticky top-10 border-t-8 border-t-blue-600">
+                                <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden sticky top-10 border-t-[12px] border-t-blue-600">
                                     <div className={`p-8 text-white ${selectedTask.priority === 'CRÍTICA' ? 'bg-red-600' : 'bg-slate-900'}`}>
-                                        <span className="text-xs font-black uppercase tracking-widest opacity-80">{selectedTask.section}</span>
-                                        <h2 className="text-2xl font-black mt-2 leading-tight">{selectedTask.name}</h2>
+                                        <span className="text-xs font-black uppercase tracking-[0.2em] opacity-80">{selectedTask.section}</span>
+                                        <h2 className="text-2xl font-black mt-2 leading-tight uppercase">{selectedTask.name}</h2>
                                     </div>
                                     <div className="p-8 space-y-8">
                                         <div>
-                                            <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-3 italic">Descripción del Objetivo</h4>
-                                            <p className="text-base text-slate-700 leading-relaxed font-semibold">{selectedTask.desc}</p>
+                                            <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-3 italic underline decoration-2 underline-offset-4">Alcance Técnico</h4>
+                                            <p className="text-lg text-slate-700 leading-relaxed font-semibold">{selectedTask.desc}</p>
                                         </div>
                                         <div className="grid grid-cols-1 gap-4">
-                                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Instrumento de Verificación</h4>
-                                                <span className="text-sm font-bold text-slate-800">{selectedTask.instrument}</span>
+                                            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Verificador Necesario</h4>
+                                                <span className="text-base font-bold text-slate-800">{selectedTask.instrument}</span>
                                             </div>
-                                            <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Marco Normativo Referencial</h4>
-                                                <span className="text-sm font-bold text-slate-800">{selectedTask.ref}</span>
+                                            <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Referencia</h4>
+                                                <span className="text-base font-bold text-slate-800">{selectedTask.ref}</span>
                                             </div>
                                         </div>
-                                        <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-dashed border-emerald-200">
-                                            <h4 className="text-xs font-black text-emerald-600 uppercase mb-2">Meta de Cumplimiento</h4>
-                                            <p className="text-sm font-bold text-emerald-900 italic">"{selectedTask.goal}"</p>
+                                        <div className="p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-100">
+                                            <h4 className="text-xs font-black text-emerald-600 uppercase mb-2">Meta de Término</h4>
+                                            <p className="text-md font-bold text-emerald-900 italic">"{selectedTask.goal}"</p>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-10 bg-slate-50 rounded-3xl border-4 border-dashed border-slate-200 text-slate-400 text-center">
-                                    <i className="fas fa-hand-pointer text-5xl mb-6 opacity-20 animate-bounce"></i>
-                                    <p className="text-lg font-bold px-4">Selecciona una actividad para desplegar la ficha técnica de ejecución.</p>
+                                    <i className="fas fa-hand-pointer text-6xl mb-6 opacity-20 animate-bounce text-blue-400"></i>
+                                    <p className="text-xl font-bold px-4 leading-snug">Selecciona una actividad para desplegar la ficha de control técnico.</p>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <footer className="mt-16 text-center text-slate-400 text-xs font-bold uppercase tracking-[0.3em] pb-10">
+                    <footer className="mt-16 text-center text-slate-400 text-xs font-black uppercase tracking-[0.4em] pb-10 border-t border-slate-100 pt-10">
                         Unidad de Ciberseguridad Asistencial • HOSMET 2026
                     </footer>
                 </div>
