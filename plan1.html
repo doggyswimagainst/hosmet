@@ -10,33 +10,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
         
         body { 
-            font-family: 'Inter', 'Segoe UI', sans-serif; 
-            background-color: #f8fafc; 
-            color: #1e293b;
+            font-family: 'Inter', system-ui, sans-serif; 
+            background-color: #f1f5f9; /* Fondo ligeramente más oscuro para resaltar tarjetas */
+            color: #0f172a; /* Slate 900 para contraste máximo */
         }
 
-        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
         .task-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease-in-out;
         }
 
         .section-urgent {
-            border-left: 4px solid #ef4444 !important;
+            border-left: 6px solid #dc2626 !important;
         }
 
-        /* Animación suave para la aparición del detalle */
         .detail-appear {
-            animation: fadeInRight 0.4s ease-out;
+            animation: fadeInRight 0.3s ease-out;
         }
 
         @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(20px); }
+            from { opacity: 0; transform: translateX(15px); }
             to { opacity: 1; transform: translateX(0); }
         }
     </style>
@@ -54,9 +53,9 @@
             const [loading, setLoading] = useState(true);
 
             useEffect(() => {
-                const loadNotionData = async () => {
+                const loadData = async () => {
                     try {
-                        const response = await fetch('tareas.html'); // Asegúrate de renombrar el archivo a tareas.html
+                        const response = await fetch('tareas.html');
                         const text = await response.text();
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(text, 'text/html');
@@ -65,12 +64,11 @@
                         const data = rows.map((row, index) => {
                             const name = row.querySelector('.cell-title')?.innerText.trim();
                             if (!name) return null;
-
                             const sectionRaw = row.querySelector('.cell-\\;h\\]e')?.innerText.trim() || "General";
                             const cleanSection = sectionRaw.replace(/[🟦]/g, '').trim();
 
                             return {
-                                uid: `task-${index}`, // ID único para evitar errores de selección
+                                uid: `task-${index}`,
                                 id: row.querySelector('.cell-RF\\=o')?.innerText.trim() || 'S/N',
                                 name: name,
                                 section: cleanSection,
@@ -87,53 +85,45 @@
                         setActivities(data);
                         setLoading(false);
                     } catch (err) {
-                        console.error("Error cargando tareas:", err);
+                        console.error(err);
                         setLoading(false);
                     }
                 };
-                loadNotionData();
+                loadData();
             }, []);
 
-            // Generación dinámica del menú
             const menuItems = useMemo(() => {
                 const sections = [...new Set(activities.map(a => a.section))];
                 return ['Todos', ...sections.sort()];
             }, [activities]);
 
-            const filtered = filter === 'Todos' 
-                ? activities 
-                : activities.filter(a => a.section === filter);
+            const filtered = filter === 'Todos' ? activities : activities.filter(a => a.section === filter);
 
-            if (loading) return (
-                <div className="h-screen flex items-center justify-center bg-slate-50">
-                    <div className="text-slate-400 font-black text-xs uppercase tracking-[0.5em] animate-pulse">Sincronizando con Notion...</div>
-                </div>
-            );
+            if (loading) return <div className="h-screen flex items-center justify-center font-black text-slate-400">CARGANDO...</div>;
 
             return (
-                <div className="max-w-7xl mx-auto p-6 md:p-16">
-                    {/* Header exacto a la imagen */}
-                    <header className="mb-16">
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="h-[3px] w-12 bg-blue-600 rounded-full"></span>
-                            <span className="text-blue-600 font-black text-[10px] uppercase tracking-[0.4em]">Hoja de Ruta 2026</span>
+                <div className="max-w-[1400px] mx-auto p-6 md:p-12 lg:p-16">
+                    {/* Header Principal */}
+                    <header className="mb-12">
+                        <div className="flex items-center gap-4 mb-4">
+                            <span className="h-1 w-16 bg-blue-700 rounded-full"></span>
+                            <span className="text-blue-700 font-black text-xs uppercase tracking-[0.4em]">Hoja de Ruta 2026</span>
                         </div>
-                        <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-[0.85]">
-                            Ciberseguridad<br/>
-                            <span className="text-blue-600 italic">HOSMET</span>
+                        <h1 className="text-6xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.85]">
+                            Ciberseguridad<br/><span className="text-blue-700 italic">HOSMET</span>
                         </h1>
                     </header>
 
-                    {/* Menú Dinámico */}
-                    <nav className="flex flex-wrap gap-x-8 gap-y-4 mb-14 border-b border-slate-100 pb-8 overflow-x-auto custom-scroll">
+                    {/* Menú Principal - Mejora de contraste y tamaño */}
+                    <nav className="flex flex-wrap gap-x-10 gap-y-6 mb-16 border-b-2 border-slate-200 pb-10 overflow-x-auto custom-scroll">
                         {menuItems.map(item => (
                             <button
                                 key={item}
                                 onClick={() => setFilter(item)}
-                                className={`text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                                className={`text-sm font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap ${
                                     filter === item 
-                                    ? 'text-slate-900 scale-110' 
-                                    : 'text-slate-300 hover:text-slate-500'
+                                    ? 'text-blue-700 border-b-4 border-blue-700 pb-2' 
+                                    : 'text-slate-500 hover:text-slate-900'
                                 }`}
                             >
                                 {item}
@@ -141,88 +131,84 @@
                         ))}
                     </nav>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                        {/* Listado de Tareas */}
-                        <div className="lg:col-span-7 space-y-5 max-h-[800px] overflow-y-auto pr-8 custom-scroll">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                        {/* Listado Central */}
+                        <div className="lg:col-span-7 space-y-6 max-h-[850px] overflow-y-auto pr-6 custom-scroll">
                             {filtered.map((task) => (
                                 <div 
                                     key={task.uid}
                                     onClick={() => setSelectedTask(task)}
-                                    className={`task-card p-7 rounded-3xl cursor-pointer border-2 shadow-sm ${
+                                    className={`task-card p-8 rounded-[2rem] cursor-pointer border-2 shadow-md ${
                                         selectedTask?.uid === task.uid 
-                                        ? 'border-blue-500 bg-blue-50/30' 
-                                        : 'border-transparent bg-white hover:border-slate-200'
+                                        ? 'border-blue-600 bg-blue-50/50' 
+                                        : 'border-white bg-white hover:border-blue-200 shadow-slate-200/50'
                                     } ${task.isAnci ? 'section-urgent' : ''}`}
                                 >
-                                    <div className="flex justify-between items-start mb-4">
-                                        <span className="bg-slate-900 text-white text-[9px] font-black px-2.5 py-1 rounded">
+                                    <div className="flex justify-between items-start mb-5">
+                                        <span className="bg-slate-900 text-white text-[10px] font-black px-3 py-1.5 rounded-lg tracking-wider">
                                             {task.id}
                                         </span>
-                                        <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${
-                                            task.isAnci 
-                                            ? 'bg-red-50 text-red-600 border-red-100' 
-                                            : 'bg-blue-50 text-blue-600 border-blue-100'
+                                        <span className={`text-xs font-black px-4 py-1.5 rounded-full border-2 ${
+                                            task.isAnci ? 'bg-red-100 text-red-700 border-red-200' : 'bg-slate-50 text-slate-700 border-slate-100'
                                         }`}>
                                             {task.isAnci ? 'URGENTE / ANCI' : task.priority}
                                         </span>
                                     </div>
-                                    <h3 className="text-xl font-bold text-slate-800 leading-tight mb-5">
+                                    <h3 className="text-2xl font-black text-slate-900 leading-tight mb-6">
                                         {task.name}
                                     </h3>
-                                    <div className="flex gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        <span className="flex items-center gap-2"><i className="far fa-calendar-alt text-blue-500"></i> {task.start}</span>
-                                        <span className="flex items-center gap-2"><i className="fas fa-flag-checkered text-slate-300"></i> {task.end}</span>
+                                    <div className="flex gap-8 text-xs font-bold text-slate-500 uppercase tracking-widest">
+                                        <span className="flex items-center gap-2 text-blue-700"><i className="far fa-calendar-alt"></i> {task.start}</span>
+                                        <span className="flex items-center gap-2"><i className="fas fa-flag-checkered"></i> {task.end}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Panel de Detalle Estilo Original */}
+                        {/* Detalle Lateral - Mejora de jerarquía y legibilidad */}
                         <div className="lg:col-span-5">
                             {selectedTask ? (
-                                <div className="detail-appear sticky top-12 bg-white rounded-[2.5rem] p-12 shadow-2xl shadow-slate-200/50 border border-slate-50">
-                                    <div className="mb-10">
+                                <div className="detail-appear sticky top-12 bg-white rounded-[3rem] p-12 shadow-2xl shadow-slate-300/40 border border-white">
+                                    <div className="mb-12">
                                         <div className="flex items-center gap-3 mb-8">
-                                            <span className="h-1.5 w-1.5 bg-blue-600 rounded-full"></span>
-                                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Detalle de actividad</span>
+                                            <span className="h-3 w-3 bg-blue-600 rounded-full animate-pulse"></span>
+                                            <span className="text-xs font-black text-blue-600 uppercase tracking-[0.3em]">Auditoría de Actividad</span>
                                         </div>
-                                        <h2 className="text-4xl font-black text-slate-900 leading-[1.1] mb-8">{selectedTask.name}</h2>
-                                        <p className="text-slate-500 text-base leading-relaxed font-medium">
+                                        <h2 className="text-4xl font-black text-slate-900 leading-[1.1] mb-10 tracking-tight">{selectedTask.name}</h2>
+                                        <p className="text-slate-700 text-lg leading-relaxed font-medium">
                                             {selectedTask.desc}
                                         </p>
                                     </div>
 
-                                    <div className="space-y-10">
+                                    <div className="space-y-12">
                                         <div>
-                                            <h4 className="text-[10px] font-black text-slate-300 uppercase mb-3 tracking-[0.2em]">Referencia Normativa</h4>
-                                            <p className="text-sm font-bold text-slate-700 leading-snug">{selectedTask.ref}</p>
+                                            <h4 className="text-xs font-black text-slate-400 uppercase mb-4 tracking-[0.2em]">Referencia Normativa</h4>
+                                            <p className="text-lg font-bold text-slate-900 leading-snug">{selectedTask.ref}</p>
                                         </div>
                                         
                                         <div>
-                                            <h4 className="text-[10px] font-black text-slate-300 uppercase mb-3 tracking-[0.2em]">Instrumento de Medición</h4>
-                                            <p className="text-sm font-bold text-slate-700 leading-snug">{selectedTask.instrument}</p>
+                                            <h4 className="text-xs font-black text-slate-400 uppercase mb-4 tracking-[0.2em]">Instrumento de Medición</h4>
+                                            <p className="text-lg font-bold text-slate-900 leading-snug">{selectedTask.instrument}</p>
                                         </div>
 
-                                        <div className="pt-10 border-t border-slate-50 flex items-center justify-between">
+                                        <div className="pt-10 border-t-2 border-slate-100 flex items-center justify-between">
                                             <div>
-                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-1 tracking-[0.2em]">Sección Técnica</h4>
-                                                <p className={`text-xs font-black uppercase ${selectedTask.isAnci ? 'text-red-500' : 'text-blue-600'}`}>
+                                                <h4 className="text-xs font-black text-slate-400 uppercase mb-2 tracking-[0.2em]">Categoría Técnica</h4>
+                                                <p className={`text-sm font-black uppercase tracking-widest ${selectedTask.isAnci ? 'text-red-600' : 'text-blue-700'}`}>
                                                     {selectedTask.section}
                                                 </p>
                                             </div>
-                                            <div className="h-14 w-14 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-200">
+                                            <div className="h-16 w-16 rounded-[1.5rem] bg-slate-900 flex items-center justify-center text-white shadow-lg">
                                                 <i className="fas fa-shield-alt text-2xl"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-100 text-slate-300 text-center shadow-sm">
-                                    <div className="mb-8 opacity-10">
-                                        <i className="fas fa-fingerprint text-7xl text-blue-500"></i>
-                                    </div>
-                                    <p className="text-[11px] font-black uppercase tracking-[0.4em] leading-loose">
-                                        Selecciona una actividad<br/>para auditar detalles
+                                <div className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 bg-white/50 rounded-[3rem] border-4 border-dashed border-slate-200 text-slate-400 text-center">
+                                    <i className="fas fa-fingerprint text-8xl mb-10 opacity-10"></i>
+                                    <p className="text-sm font-black uppercase tracking-[0.5em] leading-loose">
+                                        Selecciona una actividad<br/>para revisión técnica
                                     </p>
                                 </div>
                             )}
@@ -230,7 +216,7 @@
                     </div>
 
                     <footer className="mt-24 text-center pb-12">
-                        <span className="text-[10px] font-black text-slate-200 uppercase tracking-[0.8em]">HOSMET • Ciberseguridad • 2026</span>
+                        <span className="text-xs font-black text-slate-400 uppercase tracking-[1em]">HOSMET • 2026</span>
                     </footer>
                 </div>
             );
@@ -241,3 +227,4 @@
     </script>
 </body>
 </html>
+
