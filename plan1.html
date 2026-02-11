@@ -14,6 +14,8 @@
         .custom-scroll::-webkit-scrollbar { width: 8px; }
         .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -31,42 +33,37 @@
             useEffect(() => {
                 const fetchData = async () => {
                     try {
-                        const response = await fetch('tareas.csv');
-                        const reader = response.body.getReader();
-                        const result = await reader.read();
-                        const decoder = new TextDecoder('utf-8');
-                        const csv = decoder.decode(result.value);
+                        // Cambia el nombre aquí si renombras el archivo exportado de Notion
+                        const response = await fetch('BD TAREAS 2fcdabdc66ac80169fb0cbe1a90c5b70.html');
+                        const htmlText = await response.text();
                         
-                        // Procesar filas (omitir encabezado y filas vacías)
-                        const rows = csv.split('\n').slice(1).filter(r => r.trim() !== '');
-                        
-                        const parsedData = rows.map(row => {
-                            // Regex para manejar comas dentro de comillas en el CSV
-                            const matches = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-                            const clean = (val) => val ? val.replace(/^"|"$/g, '').trim() : '';
-                            
-                            // Limpiar nombre de sección (quitar enlaces de Notion entre paréntesis)
-                            const rawSection = clean(matches[25]);
-                            const cleanSection = rawSection.split(' (http')[0];
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(htmlText, 'text/html');
+                        const rows = Array.from(doc.querySelectorAll('table tr')).slice(1); // Omitir cabecera
 
+                        const mappedData = rows.map((row, index) => {
+                            const cells = row.cells;
+                            if (!cells || cells.length < 5) return null;
+
+                            // Mapeo basado en las clases observadas en tu archivo HTML de Notion
                             return {
-                                name: clean(matches[0]),
-                                desc: clean(matches[3]),
-                                end: clean(matches[8]),
-                                goal: clean(matches[9]),
-                                id: clean(matches[16]),
-                                instrument: clean(matches[18]),
-                                priority: clean(matches[22]),
-                                ref: clean(matches[24]),
-                                section: cleanSection || 'Sin Categoría',
-                                start: clean(matches[30])
+                                section: cells[0]?.innerText.trim().replace(/^[🟦 ]+/, '') || 'General',
+                                id: cells[1]?.innerText.trim() || `T-${index}`,
+                                name: cells[2]?.innerText.trim() || 'Sin Título',
+                                start: cells[3]?.innerText.trim().replace('@', '') || 'Pendiente',
+                                end: cells[4]?.innerText.trim().replace('@', '') || 'Pendiente',
+                                priority: cells[5]?.innerText.trim() || 'Normal',
+                                instrument: cells[7]?.innerText.trim() || 'N/A',
+                                ref: cells[8]?.innerText.trim() || 'N/A',
+                                desc: cells[9]?.innerText.trim() || 'Sin descripción disponible.',
+                                goal: 'Revisar documentación adjunta' // Notion a veces no exporta todas las columnas en el mini-html
                             };
-                        });
+                        }).filter(item => item !== null && item.name !== '');
 
-                        setActivities(parsedData);
+                        setActivities(mappedData);
                         setLoading(false);
                     } catch (error) {
-                        console.error("Error cargando CSV:", error);
+                        console.error("Error cargando el HTML de Notion:", error);
                         setLoading(false);
                     }
                 };
@@ -75,7 +72,7 @@
 
             const menuItems = useMemo(() => {
                 const sections = [...new Set(activities.map(a => a.section))];
-                return ['Todos', ...sections];
+                return ['Todos', ...sections.sort()];
             }, [activities]);
 
             const filteredActivities = filter === 'Todos' 
@@ -83,45 +80,40 @@
                 : activities.filter(a => a.section === filter);
 
             if (loading) return (
-                <div className="flex h-screen items-center justify-center bg-slate-900 text-white">
-                    <div className="animate-pulse flex flex-col items-center">
-                        <i className="fas fa-shield-alt text-5xl mb-4 text-blue-400"></i>
-                        <span className="text-xl font-bold uppercase tracking-widest">Cargando Planificación...</span>
-                    </div>
+                <div className="flex h-screen items-center justify-center text-slate-400 font-bold uppercase tracking-widest">
+                    <i className="fas fa-circle-notch animate-spin mr-3"></i> Cargando Base de Datos Notion...
                 </div>
             );
 
             return (
                 <div className="max-w-6xl mx-auto p-4 md:p-8 animate-fade-in">
-                    {/* Cabecera */}
                     <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <span className="h-1 w-12 bg-blue-600 rounded-full"></span>
                                 <span className="text-blue-600 font-black text-xs uppercase tracking-[0.3em]">Hoja de Ruta 2026</span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Ciberseguridad<br/><span className="text-blue-600 italic">HOSMET</span></h1>
+                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-none">
+                                Ciberseguridad<br/><span className="text-blue-600 italic">HOSMET</span>
+                            </h1>
                         </div>
-                        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-                            <div className="h-10 w-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
-                                <i className="fas fa-check-double"></i>
+                        <div className="hidden md:flex bg-white p-4 rounded-2xl shadow-sm border border-slate-100 items-center gap-4">
+                            <div className="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                {activities.length}
                             </div>
-                            <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Estado de Carga</p>
-                                <p className="text-sm font-black text-slate-700">{activities.length} Actividades Sincronizadas</p>
-                            </div>
+                            <p className="text-[10px] font-black text-slate-400 uppercase leading-tight">Tareas<br/>Importadas</p>
                         </div>
                     </header>
 
-                    {/* Menú de Navegación */}
-                    <nav className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-slate-100 custom-scroll overflow-x-auto">
+                    {/* Menú Original Restaurado */}
+                    <nav className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-slate-100 overflow-x-auto custom-scroll">
                         {menuItems.map(item => (
                             <button
                                 key={item}
                                 onClick={() => setFilter(item)}
-                                className={`px-5 py-2.5 rounded-full text-xs font-black transition-all duration-300 uppercase tracking-wider ${
+                                className={`px-5 py-2.5 rounded-full text-xs font-black transition-all duration-300 uppercase whitespace-nowrap ${
                                     filter === item 
-                                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 scale-105' 
+                                    ? 'bg-slate-900 text-white shadow-lg' 
                                     : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
                                 }`}
                             >
@@ -133,99 +125,72 @@
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                         {/* Lista de Actividades */}
                         <div className="lg:col-span-7 space-y-4 max-h-[700px] overflow-y-auto pr-4 custom-scroll">
-                            {filteredActivities.map((activity, idx) => (
+                            {filteredActivities.map((activity) => (
                                 <div 
-                                    key={idx}
+                                    key={activity.id}
                                     onClick={() => setSelectedTask(activity)}
-                                    className={`group p-5 rounded-2xl border-2 transition-all cursor-pointer bg-white ${
+                                    className={`p-5 rounded-2xl border-2 transition-all cursor-pointer bg-white group ${
                                         selectedTask?.id === activity.id 
-                                        ? 'border-blue-500 shadow-xl shadow-blue-50 bg-blue-50/30' 
-                                        : 'border-transparent hover:border-slate-200 shadow-sm'
+                                        ? 'border-blue-500 bg-blue-50/30' 
+                                        : 'border-transparent hover:border-slate-200'
                                     }`}
                                 >
-                                    <div className="flex justify-between items-start mb-3">
-                                        <span className="text-[10px] font-black px-2.5 py-1 bg-slate-900 text-white rounded-md tracking-tighter">
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-[10px] font-black px-2 py-1 bg-slate-900 text-white rounded uppercase tracking-tighter">
                                             {activity.id}
                                         </span>
-                                        <span className={`text-[9px] font-black px-2.5 py-1 rounded-full border ${
-                                            activity.priority === 'CRÍTICA' 
-                                            ? 'bg-red-50 text-red-600 border-red-100' 
-                                            : activity.priority === 'Alta'
-                                            ? 'bg-orange-50 text-orange-600 border-orange-100'
-                                            : 'bg-blue-50 text-blue-600 border-blue-100'
-                                        }`}>
-                                            {activity.priority}
-                                        </span>
+                                        {activity.priority && (
+                                            <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">
+                                                {activity.priority}
+                                            </span>
+                                        )}
                                     </div>
-                                    <h3 className="text-base font-bold text-slate-800 leading-tight group-hover:text-blue-600 transition-colors">
+                                    <h3 className="text-base font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
                                         {activity.name}
                                     </h3>
-                                    <div className="mt-4 flex items-center gap-6 text-slate-400 font-bold text-[10px] uppercase">
-                                        <div className="flex items-center gap-2">
-                                            <i className="far fa-calendar text-blue-400"></i>
-                                            {activity.start}
-                                        </div>
-                                        <div className="flex items-center gap-2 text-slate-300">
-                                            <i className="fas fa-arrow-right text-[8px]"></i>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <i className="fas fa-flag-checkered text-slate-500"></i>
-                                            {activity.end}
-                                        </div>
+                                    <div className="mt-4 flex gap-6 text-slate-400 font-bold text-[10px] uppercase">
+                                        <span><i className="far fa-calendar-alt mr-2 text-blue-400"></i> {activity.start}</span>
+                                        <span><i className="fas fa-flag-checkered mr-2 text-slate-300"></i> {activity.end}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Detalle de Tarea */}
-                        <div className="lg:col-span-5 sticky top-8">
+                        {/* Panel de Detalle */}
+                        <div className="lg:col-span-5">
                             {selectedTask ? (
-                                <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-2xl shadow-slate-200/50 min-h-[500px] flex flex-col animate-scale-in">
-                                    <div className="mb-8 pb-6 border-b border-slate-50">
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <span className="px-3 py-1 bg-blue-600 text-white text-[10px] font-black rounded-lg uppercase tracking-widest">Actividad {selectedTask.id}</span>
-                                        </div>
-                                        <h2 className="text-2xl font-black text-slate-900 leading-tight mb-4">{selectedTask.name}</h2>
-                                        <p className="text-slate-500 text-sm leading-relaxed font-medium">{selectedTask.desc}</p>
-                                    </div>
-
-                                    <div className="space-y-6 flex-grow">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-xl min-h-[500px] flex flex-col animate-fade-in">
+                                    <h2 className="text-2xl font-black text-slate-900 mb-4 leading-tight">{selectedTask.name}</h2>
+                                    <div className="flex-grow">
+                                        <p className="text-slate-500 text-sm leading-relaxed mb-8">{selectedTask.desc}</p>
+                                        
+                                        <div className="grid grid-cols-2 gap-4 mb-6">
+                                            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                                                 <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Referencia</h4>
                                                 <p className="text-xs font-bold text-slate-700">{selectedTask.ref}</p>
                                             </div>
-                                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                            <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                                                 <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Instrumento</h4>
                                                 <p className="text-xs font-bold text-slate-700">{selectedTask.instrument}</p>
                                             </div>
                                         </div>
-
-                                        <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
-                                            <h4 className="text-[10px] font-black text-emerald-600 uppercase mb-2">Meta / Entregable</h4>
-                                            <p className="text-sm font-bold text-emerald-900 italic">"{selectedTask.goal}"</p>
-                                        </div>
                                     </div>
                                     
-                                    <div className="mt-8 pt-6 border-t border-slate-50 text-center">
-                                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Filtro Actual: {selectedTask.section}</p>
+                                    <div className="pt-6 border-t border-slate-50">
+                                        <div className="flex items-center gap-3 text-slate-400 text-[10px] font-black uppercase">
+                                            <i className="fas fa-folder-open"></i>
+                                            <span>Sección: {selectedTask.section}</span>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
                                 <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-400 text-center">
-                                    <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                                        <i className="fas fa-mouse-pointer text-3xl opacity-20"></i>
-                                    </div>
-                                    <h3 className="text-xl font-black text-slate-300 uppercase tracking-tighter mb-2">Vista Detallada</h3>
-                                    <p className="text-sm font-medium px-4 leading-relaxed">Selecciona una actividad de la lista de la izquierda para ver su alcance técnico y objetivos.</p>
+                                    <i className="fas fa-hand-pointer text-4xl mb-4 opacity-10"></i>
+                                    <p className="text-sm font-bold uppercase tracking-widest">Selecciona una actividad</p>
                                 </div>
                             )}
                         </div>
                     </div>
-
-                    <footer className="mt-20 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.4em] pb-12 border-t border-slate-50 pt-12">
-                        HOSMET 2026 • Sistema de Planificación Dinámica
-                    </footer>
                 </div>
             );
         };
