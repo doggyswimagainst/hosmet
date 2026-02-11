@@ -10,15 +10,35 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', sans-serif; 
+            background-color: #f8fafc; 
+            color: #1e293b;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
-        
-        .task-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
-        .animate-detail { animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .task-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-urgent {
+            border-left: 4px solid #ef4444 !important;
+        }
+
+        /* Animación suave para la aparición del detalle */
+        .detail-appear {
+            animation: fadeInRight 0.4s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
     </style>
 </head>
 <body>
@@ -34,78 +54,86 @@
             const [loading, setLoading] = useState(true);
 
             useEffect(() => {
-                const fetchData = async () => {
+                const loadNotionData = async () => {
                     try {
-                        const response = await fetch('tareas.html');
-                        const htmlText = await response.text();
+                        const response = await fetch('tareas.html'); // Asegúrate de renombrar el archivo a tareas.html
+                        const text = await response.text();
                         const parser = new DOMParser();
-                        const doc = parser.parseFromString(htmlText, 'text/html');
+                        const doc = parser.parseFromString(text, 'text/html');
                         const rows = Array.from(doc.querySelectorAll('tr')).slice(1);
 
-                        const mappedData = rows.map((row, index) => {
-                            const name = row.querySelector('.cell-title')?.innerText.trim() || "";
-                            const id = row.querySelector('.cell-RF\\=o')?.innerText.trim() || "";
+                        const data = rows.map((row, index) => {
+                            const name = row.querySelector('.cell-title')?.innerText.trim();
+                            if (!name) return null;
+
                             const sectionRaw = row.querySelector('.cell-\\;h\\]e')?.innerText.trim() || "General";
                             const cleanSection = sectionRaw.replace(/[🟦]/g, '').trim();
 
-                            if (!name) return null;
-
                             return {
-                                uid: `task-${index}-${id}`, // Identificador único absoluto
-                                id: id,
+                                uid: `task-${index}`, // ID único para evitar errores de selección
+                                id: row.querySelector('.cell-RF\\=o')?.innerText.trim() || 'S/N',
                                 name: name,
                                 section: cleanSection,
                                 isAnci: cleanSection.toUpperCase().includes('ANCI'),
-                                start: row.querySelector('.cell-uvVX')?.innerText.trim().replace('@', '') || "TBD",
-                                end: row.querySelector('.cell-ejSF')?.innerText.trim().replace('@', '') || "TBD",
-                                priority: row.querySelector('.cell-rVR\\@')?.innerText.trim() || "Normal",
-                                ref: row.querySelector('.cell-_sWp')?.innerText.trim() || "N/A",
-                                instrument: row.querySelector('.cell-zVh\\[')?.innerText.trim() || "N/A",
-                                desc: row.querySelector('.cell-Q\\{I\\;')?.innerText.trim() || "Sin descripción adicional."
+                                start: row.querySelector('.cell-uvVX')?.innerText.trim().replace('@', '') || 'Pendiente',
+                                end: row.querySelector('.cell-ejSF')?.innerText.trim().replace('@', '') || 'Pendiente',
+                                priority: row.querySelector('.cell-rVR\\@')?.innerText.trim() || 'Normal',
+                                ref: row.querySelector('.cell-_sWp')?.innerText.trim() || 'No especificada',
+                                instrument: row.querySelector('.cell-zVh\\[')?.innerText.trim() || 'No definido',
+                                desc: row.querySelector('.cell-Q\\{I\\;')?.innerText.trim() || 'Sin descripción técnica disponible.'
                             };
                         }).filter(Boolean);
 
-                        setActivities(mappedData);
+                        setActivities(data);
                         setLoading(false);
-                    } catch (e) { console.error(e); setLoading(false); }
+                    } catch (err) {
+                        console.error("Error cargando tareas:", err);
+                        setLoading(false);
+                    }
                 };
-                fetchData();
+                loadNotionData();
             }, []);
 
+            // Generación dinámica del menú
             const menuItems = useMemo(() => {
                 const sections = [...new Set(activities.map(a => a.section))];
                 return ['Todos', ...sections.sort()];
             }, [activities]);
 
-            const filteredActivities = filter === 'Todos' 
+            const filtered = filter === 'Todos' 
                 ? activities 
                 : activities.filter(a => a.section === filter);
 
-            if (loading) return <div className="h-screen flex items-center justify-center font-bold text-slate-400 tracking-tighter">CARGANDO PLAN...</div>;
+            if (loading) return (
+                <div className="h-screen flex items-center justify-center bg-slate-50">
+                    <div className="text-slate-400 font-black text-xs uppercase tracking-[0.5em] animate-pulse">Sincronizando con Notion...</div>
+                </div>
+            );
 
             return (
-                <div className="max-w-6xl mx-auto p-6 md:p-12">
-                    {/* Header Original */}
-                    <header className="mb-14">
-                        <div className="flex items-center gap-3 mb-3">
-                            <span className="h-1 w-10 bg-blue-600 rounded-full"></span>
-                            <span className="text-blue-600 font-black text-[10px] uppercase tracking-[0.3em]">Hoja de Ruta 2026</span>
+                <div className="max-w-7xl mx-auto p-6 md:p-16">
+                    {/* Header exacto a la imagen */}
+                    <header className="mb-16">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="h-[3px] w-12 bg-blue-600 rounded-full"></span>
+                            <span className="text-blue-600 font-black text-[10px] uppercase tracking-[0.4em]">Hoja de Ruta 2026</span>
                         </div>
-                        <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
-                            Ciberseguridad<br/><span className="text-blue-600 italic">HOSMET</span>
+                        <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-[0.85]">
+                            Ciberseguridad<br/>
+                            <span className="text-blue-600 italic">HOSMET</span>
                         </h1>
                     </header>
 
-                    {/* Menú de Filtros */}
-                    <nav className="flex flex-wrap gap-2 mb-12 border-b border-slate-100 pb-6 overflow-x-auto custom-scroll">
+                    {/* Menú Dinámico */}
+                    <nav className="flex flex-wrap gap-x-8 gap-y-4 mb-14 border-b border-slate-100 pb-8 overflow-x-auto custom-scroll">
                         {menuItems.map(item => (
                             <button
                                 key={item}
                                 onClick={() => setFilter(item)}
-                                className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all ${
+                                className={`text-[11px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                                     filter === item 
-                                    ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' 
-                                    : 'text-slate-400 hover:text-slate-600'
+                                    ? 'text-slate-900 scale-110' 
+                                    : 'text-slate-300 hover:text-slate-500'
                                 }`}
                             >
                                 {item}
@@ -113,95 +141,96 @@
                         ))}
                     </nav>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                        {/* Lista de Tareas */}
-                        <div className="lg:col-span-7 space-y-4 max-h-[750px] overflow-y-auto pr-6 custom-scroll">
-                            {filteredActivities.map((task) => (
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+                        {/* Listado de Tareas */}
+                        <div className="lg:col-span-7 space-y-5 max-h-[800px] overflow-y-auto pr-8 custom-scroll">
+                            {filtered.map((task) => (
                                 <div 
                                     key={task.uid}
                                     onClick={() => setSelectedTask(task)}
-                                    className={`task-card p-6 rounded-2xl cursor-pointer border-2 ${
+                                    className={`task-card p-7 rounded-3xl cursor-pointer border-2 shadow-sm ${
                                         selectedTask?.uid === task.uid 
-                                        ? 'border-blue-500 bg-blue-50/40 shadow-lg' 
-                                        : 'border-transparent bg-white shadow-sm hover:border-slate-200'
-                                    }`}
+                                        ? 'border-blue-500 bg-blue-50/30' 
+                                        : 'border-transparent bg-white hover:border-slate-200'
+                                    } ${task.isAnci ? 'section-urgent' : ''}`}
                                 >
-                                    <div className="flex justify-between items-start mb-3">
-                                        <span className="bg-slate-900 text-white text-[9px] font-black px-2 py-1 rounded">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <span className="bg-slate-900 text-white text-[9px] font-black px-2.5 py-1 rounded">
                                             {task.id}
                                         </span>
                                         <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${
                                             task.isAnci 
-                                            ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' 
+                                            ? 'bg-red-50 text-red-600 border-red-100' 
                                             : 'bg-blue-50 text-blue-600 border-blue-100'
                                         }`}>
                                             {task.isAnci ? 'URGENTE / ANCI' : task.priority}
                                         </span>
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-800 leading-tight mb-4 group-hover:text-blue-600">
+                                    <h3 className="text-xl font-bold text-slate-800 leading-tight mb-5">
                                         {task.name}
                                     </h3>
-                                    <div className="flex gap-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                        <span className="flex items-center gap-2"><i className="far fa-calendar text-blue-400"></i> {task.start}</span>
+                                    <div className="flex gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        <span className="flex items-center gap-2"><i className="far fa-calendar-alt text-blue-500"></i> {task.start}</span>
                                         <span className="flex items-center gap-2"><i className="fas fa-flag-checkered text-slate-300"></i> {task.end}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Detalle Lateral Estilo Limpio */}
+                        {/* Panel de Detalle Estilo Original */}
                         <div className="lg:col-span-5">
                             {selectedTask ? (
-                                <div className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/60 border border-slate-50 animate-detail">
-                                    <div className="mb-8">
-                                        <div className="flex items-center gap-2 mb-6">
-                                            <span className="h-2 w-2 bg-blue-600 rounded-full"></span>
-                                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Ficha de Actividad</span>
+                                <div className="detail-appear sticky top-12 bg-white rounded-[2.5rem] p-12 shadow-2xl shadow-slate-200/50 border border-slate-50">
+                                    <div className="mb-10">
+                                        <div className="flex items-center gap-3 mb-8">
+                                            <span className="h-1.5 w-1.5 bg-blue-600 rounded-full"></span>
+                                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Detalle de actividad</span>
                                         </div>
-                                        <h2 className="text-3xl font-black text-slate-900 leading-[1.1] mb-6">{selectedTask.name}</h2>
-                                        <p className="text-slate-500 text-sm leading-relaxed font-medium mb-8">
+                                        <h2 className="text-4xl font-black text-slate-900 leading-[1.1] mb-8">{selectedTask.name}</h2>
+                                        <p className="text-slate-500 text-base leading-relaxed font-medium">
                                             {selectedTask.desc}
                                         </p>
                                     </div>
 
-                                    <div className="space-y-8">
-                                        <div className="grid grid-cols-1 gap-6">
-                                            <div>
-                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-2 tracking-widest">Referencia Normativa</h4>
-                                                <p className="text-sm font-bold text-slate-700">{selectedTask.ref}</p>
-                                            </div>
-                                            <div>
-                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-2 tracking-widest">Instrumento de Medición</h4>
-                                                <p className="text-sm font-bold text-slate-700">{selectedTask.instrument}</p>
-                                            </div>
+                                    <div className="space-y-10">
+                                        <div>
+                                            <h4 className="text-[10px] font-black text-slate-300 uppercase mb-3 tracking-[0.2em]">Referencia Normativa</h4>
+                                            <p className="text-sm font-bold text-slate-700 leading-snug">{selectedTask.ref}</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <h4 className="text-[10px] font-black text-slate-300 uppercase mb-3 tracking-[0.2em]">Instrumento de Medición</h4>
+                                            <p className="text-sm font-bold text-slate-700 leading-snug">{selectedTask.instrument}</p>
                                         </div>
 
-                                        <div className="pt-8 border-t border-slate-50">
-                                            <div className="flex items-center justify-between">
-                                                <div>
-                                                    <h4 className="text-[10px] font-black text-slate-300 uppercase mb-1 tracking-widest">Sección</h4>
-                                                    <p className={`text-xs font-black ${selectedTask.isAnci ? 'text-red-500' : 'text-blue-600'}`}>
-                                                        {selectedTask.section}
-                                                    </p>
-                                                </div>
-                                                <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-200">
-                                                    <i className="fas fa-shield-alt text-xl"></i>
-                                                </div>
+                                        <div className="pt-10 border-t border-slate-50 flex items-center justify-between">
+                                            <div>
+                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-1 tracking-[0.2em]">Sección Técnica</h4>
+                                                <p className={`text-xs font-black uppercase ${selectedTask.isAnci ? 'text-red-500' : 'text-blue-600'}`}>
+                                                    {selectedTask.section}
+                                                </p>
+                                            </div>
+                                            <div className="h-14 w-14 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-200">
+                                                <i className="fas fa-shield-alt text-2xl"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="h-full min-h-[450px] flex flex-col items-center justify-center p-12 bg-white rounded-[2rem] border-2 border-dashed border-slate-100 text-slate-300 text-center shadow-sm">
-                                    <i className="fas fa-fingerprint text-5xl mb-6 opacity-20"></i>
-                                    <p className="text-xs font-black uppercase tracking-[0.3em]">Seleccione una tarea<br/>para auditar</p>
+                                <div className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 bg-white rounded-[2.5rem] border-2 border-dashed border-slate-100 text-slate-300 text-center shadow-sm">
+                                    <div className="mb-8 opacity-10">
+                                        <i className="fas fa-fingerprint text-7xl text-blue-500"></i>
+                                    </div>
+                                    <p className="text-[11px] font-black uppercase tracking-[0.4em] leading-loose">
+                                        Selecciona una actividad<br/>para auditar detalles
+                                    </p>
                                 </div>
                             )}
                         </div>
                     </div>
-                    
-                    <footer className="mt-20 text-center">
-                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.5em]">HOSMET • 2026</p>
+
+                    <footer className="mt-24 text-center pb-12">
+                        <span className="text-[10px] font-black text-slate-200 uppercase tracking-[0.8em]">HOSMET • Ciberseguridad • 2026</span>
                     </footer>
                 </div>
             );
