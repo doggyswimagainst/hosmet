@@ -10,14 +10,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; }
-        .custom-scroll::-webkit-scrollbar { width: 8px; }
-        .custom-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
         
-        /* Animaciones para suavizar la interfaz */
-        .animate-scale-in { animation: scaleIn 0.2s ease-out; }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        .task-card { transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .animate-detail { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
 <body>
@@ -36,43 +37,37 @@
                 const fetchData = async () => {
                     try {
                         const response = await fetch('tareas.html');
-                        if (!response.ok) throw new Error("Archivo tareas.html no encontrado");
                         const htmlText = await response.text();
-                        
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(htmlText, 'text/html');
                         const rows = Array.from(doc.querySelectorAll('tr')).slice(1);
 
                         const mappedData = rows.map((row, index) => {
-                            // Usamos selectores exactos del HTML de Notion
-                            const id = row.querySelector('.cell-RF\\=o')?.innerText.trim() || "";
                             const name = row.querySelector('.cell-title')?.innerText.trim() || "";
+                            const id = row.querySelector('.cell-RF\\=o')?.innerText.trim() || "";
                             const sectionRaw = row.querySelector('.cell-\\;h\\]e')?.innerText.trim() || "General";
-                            const desc = row.querySelector('.cell-Q\\{I\\;')?.innerText.trim() || "Sin descripción.";
-                            
+                            const cleanSection = sectionRaw.replace(/[🟦]/g, '').trim();
+
                             if (!name) return null;
 
                             return {
-                                // Usamos una combinación de ID e Index para asegurar unicidad absoluta en la selección
-                                uid: `task-${id}-${index}`, 
+                                uid: `task-${index}-${id}`, // Identificador único absoluto
                                 id: id,
                                 name: name,
-                                section: sectionRaw.replace(/[🟦]/g, '').trim(),
+                                section: cleanSection,
+                                isAnci: cleanSection.toUpperCase().includes('ANCI'),
                                 start: row.querySelector('.cell-uvVX')?.innerText.trim().replace('@', '') || "TBD",
                                 end: row.querySelector('.cell-ejSF')?.innerText.trim().replace('@', '') || "TBD",
                                 priority: row.querySelector('.cell-rVR\\@')?.innerText.trim() || "Normal",
                                 ref: row.querySelector('.cell-_sWp')?.innerText.trim() || "N/A",
                                 instrument: row.querySelector('.cell-zVh\\[')?.innerText.trim() || "N/A",
-                                desc: desc
+                                desc: row.querySelector('.cell-Q\\{I\\;')?.innerText.trim() || "Sin descripción adicional."
                             };
                         }).filter(Boolean);
 
                         setActivities(mappedData);
                         setLoading(false);
-                    } catch (error) {
-                        console.error(error);
-                        setLoading(false);
-                    }
+                    } catch (e) { console.error(e); setLoading(false); }
                 };
                 fetchData();
             }, []);
@@ -86,40 +81,31 @@
                 ? activities 
                 : activities.filter(a => a.section === filter);
 
-            if (loading) return <div className="flex h-screen items-center justify-center text-slate-400 font-bold uppercase tracking-widest animate-pulse">Cargando Planificación...</div>;
+            if (loading) return <div className="h-screen flex items-center justify-center font-bold text-slate-400 tracking-tighter">CARGANDO PLAN...</div>;
 
             return (
-                <div className="max-w-6xl mx-auto p-4 md:p-8">
-                    {/* Cabecera Estilo Original */}
-                    <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <span className="h-1 w-12 bg-blue-600 rounded-full"></span>
-                                <span className="text-blue-600 font-black text-xs uppercase tracking-[0.3em]">Hoja de Ruta 2026</span>
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Ciberseguridad<br/><span className="text-blue-600 italic">HOSMET</span></h1>
+                <div className="max-w-6xl mx-auto p-6 md:p-12">
+                    {/* Header Original */}
+                    <header className="mb-14">
+                        <div className="flex items-center gap-3 mb-3">
+                            <span className="h-1 w-10 bg-blue-600 rounded-full"></span>
+                            <span className="text-blue-600 font-black text-[10px] uppercase tracking-[0.3em]">Hoja de Ruta 2026</span>
                         </div>
-                        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
-                            <div className="h-10 w-10 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
-                                <i className="fas fa-check-double"></i>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Estado</p>
-                                <p className="text-sm font-black text-slate-700">{activities.length} Actividades Sincronizadas</p>
-                            </div>
-                        </div>
+                        <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-[0.9]">
+                            Ciberseguridad<br/><span className="text-blue-600 italic">HOSMET</span>
+                        </h1>
                     </header>
 
-                    {/* Menú de Navegación Original */}
-                    <nav className="flex flex-wrap gap-2 mb-10 pb-4 border-b border-slate-100 custom-scroll overflow-x-auto">
+                    {/* Menú de Filtros */}
+                    <nav className="flex flex-wrap gap-2 mb-12 border-b border-slate-100 pb-6 overflow-x-auto custom-scroll">
                         {menuItems.map(item => (
                             <button
                                 key={item}
                                 onClick={() => setFilter(item)}
-                                className={`px-5 py-2.5 rounded-full text-xs font-black transition-all duration-300 uppercase tracking-wider ${
+                                className={`px-6 py-2 rounded-full text-[11px] font-black uppercase tracking-wider transition-all ${
                                     filter === item 
-                                    ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 scale-105' 
-                                    : 'bg-white text-slate-400 hover:bg-slate-50 border border-slate-100'
+                                    ? 'bg-slate-900 text-white shadow-xl shadow-slate-200' 
+                                    : 'text-slate-400 hover:text-slate-600'
                                 }`}
                             >
                                 {item}
@@ -127,96 +113,95 @@
                         ))}
                     </nav>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                        {/* Lista de Actividades con corrección de selección */}
-                        <div className="lg:col-span-7 space-y-4 max-h-[700px] overflow-y-auto pr-4 custom-scroll">
-                            {filteredActivities.map((activity) => (
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                        {/* Lista de Tareas */}
+                        <div className="lg:col-span-7 space-y-4 max-h-[750px] overflow-y-auto pr-6 custom-scroll">
+                            {filteredActivities.map((task) => (
                                 <div 
-                                    key={activity.uid}
-                                    onClick={() => setSelectedTask(activity)}
-                                    className={`group p-5 rounded-2xl border-2 transition-all cursor-pointer bg-white ${
-                                        selectedTask?.uid === activity.uid 
-                                        ? 'border-blue-500 shadow-xl shadow-blue-50 bg-blue-50/30' 
-                                        : 'border-transparent hover:border-slate-200 shadow-sm'
+                                    key={task.uid}
+                                    onClick={() => setSelectedTask(task)}
+                                    className={`task-card p-6 rounded-2xl cursor-pointer border-2 ${
+                                        selectedTask?.uid === task.uid 
+                                        ? 'border-blue-500 bg-blue-50/40 shadow-lg' 
+                                        : 'border-transparent bg-white shadow-sm hover:border-slate-200'
                                     }`}
                                 >
                                     <div className="flex justify-between items-start mb-3">
-                                        <span className="text-[10px] font-black px-2.5 py-1 bg-slate-900 text-white rounded-md tracking-tighter">
-                                            {activity.id}
+                                        <span className="bg-slate-900 text-white text-[9px] font-black px-2 py-1 rounded">
+                                            {task.id}
                                         </span>
-                                        <span className={`text-[9px] font-black px-2.5 py-1 rounded-full border ${
-                                            activity.priority.includes('CRÍTICA') 
-                                            ? 'bg-red-50 text-red-600 border-red-100' 
+                                        <span className={`text-[9px] font-black px-3 py-1 rounded-full border ${
+                                            task.isAnci 
+                                            ? 'bg-red-50 text-red-600 border-red-100 animate-pulse' 
                                             : 'bg-blue-50 text-blue-600 border-blue-100'
                                         }`}>
-                                            {activity.priority || 'NORMAL'}
+                                            {task.isAnci ? 'URGENTE / ANCI' : task.priority}
                                         </span>
                                     </div>
-                                    <h3 className="text-base font-bold text-slate-800 leading-tight group-hover:text-blue-600 transition-colors">
-                                        {activity.name}
+                                    <h3 className="text-lg font-bold text-slate-800 leading-tight mb-4 group-hover:text-blue-600">
+                                        {task.name}
                                     </h3>
-                                    <div className="mt-4 flex items-center gap-6 text-slate-400 font-bold text-[10px] uppercase tracking-widest">
-                                        <div className="flex items-center gap-2">
-                                            <i className="far fa-calendar text-blue-400"></i>
-                                            {activity.start}
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <i className="fas fa-flag-checkered text-slate-500"></i>
-                                            {activity.end}
-                                        </div>
+                                    <div className="flex gap-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        <span className="flex items-center gap-2"><i className="far fa-calendar text-blue-400"></i> {task.start}</span>
+                                        <span className="flex items-center gap-2"><i className="fas fa-flag-checkered text-slate-300"></i> {task.end}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
-                        {/* Panel de Detalle Estilo Original */}
-                        <div className="lg:col-span-5 sticky top-8">
+                        {/* Detalle Lateral Estilo Limpio */}
+                        <div className="lg:col-span-5">
                             {selectedTask ? (
-                                <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-2xl shadow-slate-200/50 min-h-[500px] flex flex-col animate-scale-in">
-                                    <div className="mb-8 pb-6 border-b border-slate-50">
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <span className="px-3 py-1 bg-blue-600 text-white text-[10px] font-black rounded-lg uppercase tracking-widest">Actividad {selectedTask.id}</span>
+                                <div className="bg-white rounded-[2rem] p-10 shadow-2xl shadow-slate-200/60 border border-slate-50 animate-detail">
+                                    <div className="mb-8">
+                                        <div className="flex items-center gap-2 mb-6">
+                                            <span className="h-2 w-2 bg-blue-600 rounded-full"></span>
+                                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Ficha de Actividad</span>
                                         </div>
-                                        <h2 className="text-2xl font-black text-slate-900 leading-tight mb-4">{selectedTask.name}</h2>
-                                        <p className="text-slate-500 text-sm leading-relaxed font-medium">{selectedTask.desc}</p>
+                                        <h2 className="text-3xl font-black text-slate-900 leading-[1.1] mb-6">{selectedTask.name}</h2>
+                                        <p className="text-slate-500 text-sm leading-relaxed font-medium mb-8">
+                                            {selectedTask.desc}
+                                        </p>
                                     </div>
 
-                                    <div className="space-y-6 flex-grow">
-                                        <div className="grid grid-cols-2 gap-4">
-                                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Referencia</h4>
-                                                <p className="text-xs font-bold text-slate-700">{selectedTask.ref}</p>
+                                    <div className="space-y-8">
+                                        <div className="grid grid-cols-1 gap-6">
+                                            <div>
+                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-2 tracking-widest">Referencia Normativa</h4>
+                                                <p className="text-sm font-bold text-slate-700">{selectedTask.ref}</p>
                                             </div>
-                                            <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                                <h4 className="text-[10px] font-black text-slate-400 uppercase mb-1">Instrumento</h4>
-                                                <p className="text-xs font-bold text-slate-700">{selectedTask.instrument}</p>
+                                            <div>
+                                                <h4 className="text-[10px] font-black text-slate-300 uppercase mb-2 tracking-widest">Instrumento de Medición</h4>
+                                                <p className="text-sm font-bold text-slate-700">{selectedTask.instrument}</p>
                                             </div>
                                         </div>
 
-                                        <div className="p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
-                                            <h4 className="text-[10px] font-black text-emerald-600 uppercase mb-1">Categoría</h4>
-                                            <p className="text-sm font-bold text-emerald-900 italic">{selectedTask.section}</p>
+                                        <div className="pt-8 border-t border-slate-50">
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <h4 className="text-[10px] font-black text-slate-300 uppercase mb-1 tracking-widest">Sección</h4>
+                                                    <p className={`text-xs font-black ${selectedTask.isAnci ? 'text-red-500' : 'text-blue-600'}`}>
+                                                        {selectedTask.section}
+                                                    </p>
+                                                </div>
+                                                <div className="h-12 w-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-200">
+                                                    <i className="fas fa-shield-alt text-xl"></i>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <div className="mt-8 pt-6 border-t border-slate-50 text-center">
-                                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]">HOSMET CIBERSEGURIDAD 2026</p>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-12 bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-400 text-center shadow-sm">
-                                    <div className="h-20 w-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                                        <i className="fas fa-mouse-pointer text-3xl opacity-20 text-blue-500"></i>
-                                    </div>
-                                    <h3 className="text-xl font-black text-slate-300 uppercase tracking-tighter mb-2">Vista Detallada</h3>
-                                    <p className="text-sm font-medium px-4 leading-relaxed">Selecciona una actividad de la lista para visualizar los requerimientos técnicos.</p>
+                                <div className="h-full min-h-[450px] flex flex-col items-center justify-center p-12 bg-white rounded-[2rem] border-2 border-dashed border-slate-100 text-slate-300 text-center shadow-sm">
+                                    <i className="fas fa-fingerprint text-5xl mb-6 opacity-20"></i>
+                                    <p className="text-xs font-black uppercase tracking-[0.3em]">Seleccione una tarea<br/>para auditar</p>
                                 </div>
                             )}
                         </div>
                     </div>
-
-                    <footer className="mt-20 text-center text-slate-300 text-[10px] font-black uppercase tracking-[0.4em] pb-12 border-t border-slate-50 pt-12">
-                        HOSMET 2026 • Planificación Dinámica
+                    
+                    <footer className="mt-20 text-center">
+                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.5em]">HOSMET • 2026</p>
                     </footer>
                 </div>
             );
