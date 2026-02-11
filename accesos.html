@@ -21,13 +21,6 @@
             overflow-x: hidden;
         }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -36,9 +29,7 @@
         .content-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             overflow: hidden;
@@ -56,455 +47,246 @@
             z-index: 10;
         }
 
-        .nav-button {
+        .nav-tab {
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav-tab:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            font-weight: 600;
-            border-radius: 16px;
-            padding: 1rem 2rem;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-tab.active .section-number {
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
         }
 
-        .nav-button:hover:not(:disabled) {
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 16px 48px rgba(102, 126, 234, 0.4);
+        .content-card-enhanced {
+            background: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .info-box {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+        .definition-card {
+            background: #f8fafc;
             border-left: 4px solid #3b82f6;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-item:hover {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-            transform: translateX(8px);
-        }
-
-        .nav-item.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-        }
-
-        .content-section {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            padding: 2rem;
-            margin: 1rem 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
         }
 
         .gradient-text {
             background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
-
-        .slide-in {
-            animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        
         .pdf-link {
             background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             padding: 0.75rem 1.5rem;
             border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .pdf-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
-        }
-
-        .content-text {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.8;
-            color: #374151;
-        }
-
-        .definition-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .content-card-enhanced {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            border: 1px solid #e5e7eb;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .nav-tab {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #64748b;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
-            color: white;
-        }
-
-        .overflow-x-auto::-webkit-scrollbar {
-            height: 6px;
-        }
-
-        .overflow-x-auto::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
         }
     </style>
 </head>
 <body class="p-4 sm:p-8">
     <div class="container mx-auto">
-        <div class="content-card overflow-hidden">
-            <header class="p-8 sm:p-12 border-b border-gray-200">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-6 lg:space-y-0">
+        <div class="content-card">
+            <header class="p-8 border-b border-gray-200">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                     <div>
-                        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 gradient-text">
+                        <h1 class="text-3xl font-bold text-gray-800 mb-2 gradient-text">
                             Protocolo de Gestión de Accesos a TrakCare
                         </h1>
-                        <p class="text-lg text-gray-600">
-                            Hospital Metropolitano - Versión 1.0
-                        </p>
+                        <p class="text-gray-600">Hospital Metropolitano - Versión 1.1</p>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="p.pdf" target="_blank" class="pdf-link">
-                            <i class="fas fa-file-pdf"></i>
-                            Ver PDF Original
-                        </a>
-                    </div>
+                    <a href="p.pdf" target="_blank" class="pdf-link flex items-center gap-2 font-semibold">
+                        <i class="fas fa-file-pdf"></i> Ver PDF Original
+                    </a>
                 </div>
             </header>
 
-            <div class="w-full">
-                <div class="bg-white border-b border-gray-200">
-                    <div class="px-6 lg:px-8">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-list mr-3 text-blue-600"></i>
-                                Navegación del Protocolo
-                            </h3>
-                            <div class="flex items-center space-x-2">
-                                <button id="prev-tab" class="p-2 text-gray-500 hover:text-blue-600 transition-colors">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button id="next-tab" class="p-2 text-gray-500 hover:text-blue-600 transition-colors">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <nav id="horizontal-nav" class="flex space-x-1 pb-2">
-                                </nav>
-                        </div>
-                    </div>
+            <div class="bg-white border-b border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                        <i class="fas fa-th-large mr-3 text-blue-600"></i>
+                        Índice del Protocolo
+                    </h3>
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider italic">Navegación sin scroll</span>
                 </div>
-
-                <main class="p-6 lg:p-8">
-                    <div id="content-area" class="space-y-8">
-                        </div>
-                </main>
+                
+                <nav id="grid-nav" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                    </nav>
             </div>
+
+            <main class="p-6 lg:p-8">
+                <div id="content-area" class="space-y-6">
+                    </div>
+            </main>
         </div>
     </div>
 
-    <footer class="h-11 bg-gradient-to-r from-blue-900 to-purple-900 text-white flex items-center justify-center">
-        <div class="container mx-auto px-4">
-            <div class="flex items-center justify-between text-sm">
-                <div class="flex items-center space-x-6">
-                    <span class="flex items-center">
-                        <i class="fas fa-info-circle mr-2 text-blue-300"></i>
-                        Para más información:
-                    </span>
-                    <a href="https://intranet.hosmet.cl" target="_blank" class="text-blue-300 hover:text-white transition-colors">
-                        intranet.hosmet.cl
-                    </a>
-                </div>
-                <div class="w-px h-6 bg-white/30"></div>
-                <span class="flex items-center">
-                    <i class="fas fa-building mr-2 text-blue-300"></i>
-                    Unidad de Gestión de la Información
-                </span>
-                <div class="w-px h-6 bg-white/30"></div>
-                <span class="flex items-center">
-                    <i class="fas fa-phone mr-2 text-green-300"></i>
-                    Anexo: <span class="font-bold ml-1">xxxxxx</span>
-                </span>
-                <div class="w-px h-6 bg-white/30"></div>
-                <span class="flex items-center">
-                    <i class="fas fa-clock mr-2 text-yellow-300"></i>
-                    <span class="font-bold">24/7</span> Soporte
-                </span>
+    <footer class="mt-8 py-4 bg-gray-900 text-white rounded-xl">
+        <div class="container mx-auto px-6 flex flex-wrap justify-between items-center text-sm gap-4">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-2"><i class="fas fa-building text-blue-400"></i> Unidad de Gestión de la Información</span>
+                <span class="flex items-center gap-2"><i class="fas fa-phone text-green-400"></i> Anexo: xxxxxx</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-clock text-yellow-400"></i> Soporte 24/7
             </div>
         </div>
     </footer>
 
     <script>
-        let protocolContent = {};
-
-        function loadProtocolContent() {
-            const embeddedContent = {
-                "seccion-1": {
-                    title: "Introducción y Propósito",
-                    icon: "fas fa-info-circle",
-                    content: formatContent(`El Hospital Metropolitano pone a disposición de sus funcionarios y colaboradores el sistema de registro clínico electrónico TrakCare MEUI. El presente protocolo tiene como propósito establecer un marco normativo claro, seguro y eficiente para la gestión del ciclo de vida de las cuentas de usuario en TrakCare, desde su creación hasta su inactivación. Busca garantizar la integridad, confidencialidad y disponibilidad de la información clínica, en cumplimiento con la normativa legal vigente y las directrices del Servicio de Salud Metropolitano Oriente (SSMO).`)
-                },
-                "seccion-2": {
-                    title: "Objetivo General",
-                    icon: "fas fa-bullseye",
-                    content: formatContent(`El objetivo general es establecer y garantizar que los procedimientos para la creación, activación, modificación, inactivación y gestión general de cuentas de acceso a TrakCare para todos los funcionarios y colaboradores del Hospital Metropolitano se realicen de manera eficiente, segura, trazable y conforme a las políticas de seguridad de la información institucionales.`)
-                },
-                "seccion-3": {
-                    title: "Alcance y Aplicabilidad Universal",
-                    icon: "fas fa-globe",
-                    content: formatContent(`Este procedimiento aplica a todo individuo que requiera el uso del sistema TrakCare para el desempeño de sus funciones asignadas dentro del Hospital Metropolitano, independientemente de su calidad contractual o jurídica. Esto incluye a funcionarios de planta, a contrata, personal a honorarios, becados, internos, estudiantes en práctica, personal de empresas externas, personal en comisión de servicio y voluntariado autorizado. La aplicación del protocolo está condicionada a la previa finalización del proceso de habilitación institucional.`)
-                },
-                "seccion-4": {
-                    title: "Definiciones Clave",
-                    icon: "fas fa-book",
-                    content: formatContent(`TrakCare: Sistema de Registro Clínico Electrónico utilizado en el HDS.
-
-Unidad de Gestión de la Información: Unidad responsable de la gestión operativa de las cuentas TrakCare.
-
-SSMO: Servicio de Salud Metropolitano Oriente.
-
-OSticket: Sistema de gestión de tickets de la Unidad de Gestión de la Información.
-
-Cuenta Activa: Cuenta de usuario habilitada para acceder a TrakCare.
-
-Cuenta Inactiva: Cuenta de usuario deshabilitada temporal o permanentemente.
-
-Grupo de Seguridad: Conjunto de permisos predefinidos en TrakCare.
-
-Perfil de Acceso: Configuración específica dentro de un Grupo de Seguridad.
-
-Colaborador: Término genérico que engloba a toda persona que requiera acceso a TrakCare.
-
-Calidad jurídica: Posición o estatus legal del personal al integrarse al HDS.
-
-Habilitación temporal: Autorización temporal realizada por los jefes clínicos en horario inhábil.
-
-Constancia de Habilitación Institucional: Documento oficial que certifica que un colaborador ha sido formalmente verificado y autorizado para iniciar funciones.`)
-                },
-                "seccion-5": {
-                    title: "Habilitación Institucional Unificada",
-                    icon: "fas fa-user-check",
-                    content: formatContent(`El acceso a TrakCare y a cualquier otro sistema es un privilegio otorgado únicamente a colaboradores validados a través del proceso de Habilitación Institucional Unificada. Este proceso es obligatorio para todos los colaboradores y es gestionado por la Subdirección de Gestión de las Personas (RRHH) o la Unidad de Relación Asistencial Docente (URAD), según corresponda. La Jefatura es responsable de asegurar que el colaborador cuente con su Constancia de Habilitación antes de iniciar la solicitud de acceso a TrakCare.`)
-                },
-                "seccion-6": {
-                    title: "Principios Generales de Gestión de Acceso",
-                    icon: "fas fa-shield-alt",
-                    content: formatContent(`Principio de menor privilegio: Cada usuario debe tener acceso solo a lo necesario para sus funciones.
-
-Individualidad e intransferibilidad: Las credenciales son personales y está prohibido compartirlas.
-
-Acceso condicionado a habilitación previa: Se requiere la Constancia de Habilitación vigente para acceder.
-
-Justificación funcional: Todo permiso debe estar respaldado por una necesidad operativa explícita.
-
-Control y trazabilidad: Todas las acciones deben quedar registradas formalmente a través de la Unidad de Gestión de la Información.
-
-Temporalidad y revisión periódica: Los accesos se mantendrán vigentes solo mientras exista un vínculo activo.
-
-Seguridad de la información: Todo acceso debe cumplir con los lineamientos de confidencialidad y normativas legales vigentes.`)
-                },
-                "seccion-7": {
-                    title: "Roles y Responsabilidades",
-                    icon: "fas fa-users",
-                    content: formatContent(`Colaborador Solicitante: Debe haber completado su proceso de habilitación, cumplir con las políticas de seguridad y notificar a su jefatura sobre cambios de rol.
-
-Jefatura / Supervisor: Debe validar la necesidad de acceso, firmar los formularios de solicitud, y notificar a RRHH/URAD y a la Unidad de Gestión de la Información sobre desvinculaciones o cambios de personal.
-
-RRHH / URAD: Deben ejecutar el Protocolo de Habilitación Institucional, emitir la Constancia de Habilitación y notificar a la Unidad de Gestión de la Información sobre las vinculaciones y desvinculaciones.
-
-Unidad de Gestión de la Información: Es responsable de recepcionar y validar las solicitudes, crear, activar, inactivar y modificar perfiles, notificar al usuario y al SSMO, y gestionar reseteo de contraseñas.
-
-Departamento de Informatica: Supervisa el cumplimiento del protocolo, define los perfiles de acceso y realiza auditorías de seguridad.`)
-                },
-                "seccion-8": {
-                    title: "Procedimiento de Solicitud y Creación de Cuentas Nuevas",
-                    icon: "fas fa-clipboard-list",
-                    content: formatContent(`Este procedimiento se aplica a colaboradores debidamente habilitados. Requiere que el colaborador cuente con su "Constancia de Habilitación Institucional" y haya completado la capacitación. La solicitud debe enviarse a soporte@hosmet.cl con la constancia y el formulario de solicitud completo y firmado. La Unidad de Gestión de la Información se encarga de verificar la documentación, crear el usuario en TrakCare, registrar la solicitud, notificar al SSMO y coordinar la entrega de credenciales.`)
-                },
-                "seccion-9": {
-                    title: "Procedimiento de Activación de Cuentas Existentes",
-                    icon: "fas fa-user-plus",
-                    content: formatContent(`Aplica cuando un colaborador con una cuenta inactivada retoma funciones. Se requiere una solicitud formal desde la jefatura a soporte@hosmet.cl indicando que el vínculo laboral está vigente. La Unidad de Gestión de la Información verifica la cuenta, la activa en TrakCare, registra la activación y notifica al SSMO y al usuario.`)
-                },
-                "seccion-10": {
-                    title: "Procedimiento de Inactivación de Cuentas",
-                    icon: "fas fa-user-times",
-                    content: formatContent(`Es una medida de seguridad que se puede ejecutar por inactividad técnica o por solicitud formal asociada al término de funciones. Todas las inactivaciones son gestionadas por la Unidad de Gestión de la Información para garantizar la seguridad y optimizar el uso de licencias.`)
-                },
-                "seccion-11": {
-                    title: "Procedimiento de Modificación de Permisos",
-                    icon: "fas fa-user-edit",
-                    content: formatContent(`Cuando un colaborador cambia de funciones, se debe ingresar una nueva solicitud indicando el nuevo perfil y la justificación. Las modificaciones sustanciales pueden requerir una actualización del proceso de habilitación con RRHH o URAD.`)
-                },
-                "seccion-12": {
-                    title: "Gestión de Contraseñas",
-                    icon: "fas fa-key",
-                    content: formatContent(`Las contraseñas iniciales son temporales y se entregan de forma segura. El usuario debe cambiarlas en el primer inicio de sesión. Se promueve el uso de contraseñas seguras y se fuerza el cambio periódico. El sistema puede bloquear las cuentas por intentos fallidos, y el reseteo lo gestiona la Unidad de Gestión de la Información.`)
-                },
-                "seccion-13": {
-                    title: "Capacitación Específica en TrakCare",
-                    icon: "fas fa-graduation-cap",
-                    content: formatContent(`Esta capacitación es obligatoria para todo colaborador antes de recibir acceso efectivo a TrakCare. Es específica para el uso funcional y seguro del sistema y es complementaria al proceso de Habilitación Institucional.`)
-                },
-                "seccion-14": {
-                    title: "Auditoría y Control",
-                    icon: "fas fa-chart-line",
-                    content: formatContent(`Las jefaturas deben revisar semestralmente los accesos activos del personal a su cargo. La Unidad de Gestión de la Información realiza controles mensuales para detectar inactividad y garantizar el cierre oportuno de accesos.`)
-                },
-                "seccion-15": {
-                    title: "Flujograma General de Gestión de Accesos a TrakCare",
-                    icon: "fas fa-project-diagram",
-                    content: formatContent(`El proceso comienza con la verificación de la habilitación institucional/profesional y continúa con la solicitud formal, validación documental, creación o activación de cuenta, capacitación y entrega segura de credenciales.`)
-                },
-                "seccion-16": {
-                    title: "Anexos",
-                    icon: "fas fa-paperclip",
-                    content: formatContent(`Se mencionan los formularios tipo utilizados en el protocolo, como el Formulario solicitud acceso TrakCare, el Formulario de inactivación, la Constancia de Habilitación y el Acuerdo de confidencialidad.`)
-                }
-            };
-            
-            protocolContent = embeddedContent;
-            generateSidebar();
-            loadContent('seccion-1');
-        }
-
-        function formatContent(text) {
-            let isDefinitionsSection = text.includes('TrakCare:') && text.includes('Unidad de Gestión de la Información:');
-            let isPrinciplesSection = text.includes('Principio de menor privilegio:');
-            let isRolesSection = text.includes('Colaborador Solicitante:') && text.includes('Jefatura / Supervisor:');
-            
-            if (isDefinitionsSection || isPrinciplesSection || isRolesSection) {
-                const lines = text.split('\n').filter(line => line.trim());
-                const items = lines.filter(line => line.includes(':') && !line.startsWith('http'));
-                const mid = Math.ceil(items.length / 2);
-                const left = items.slice(0, mid);
-                const right = items.slice(mid);
-                
-                const icon = isRolesSection ? 'fa-user-tie' : (isPrinciplesSection ? 'fa-shield-alt' : 'fa-bookmark');
-
-                return `
-                    <div class="content-card-enhanced p-6 rounded-xl">
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <div class="space-y-4">
-                                ${left.map(line => renderItem(line, icon)).join('')}
-                            </div>
-                            <div class="space-y-4">
-                                ${right.map(line => renderItem(line, icon)).join('')}
-                            </div>
-                        </div>
-                    </div>
-                `;
+        let protocolContent = {
+            "seccion-1": {
+                title: "Introducción y Propósito",
+                icon: "fas fa-info-circle",
+                content: `El Hospital Metropolitano pone a disposición de sus funcionarios y colaboradores el sistema de registro clínico electrónico TrakCare MEUI. El presente protocolo tiene como propósito establecer un marco normativo claro, seguro y eficiente para la gestión del ciclo de vida de las cuentas de usuario en TrakCare.`
+            },
+            "seccion-2": {
+                title: "Objetivo General",
+                icon: "fas fa-bullseye",
+                content: `Establecer y garantizar que los procedimientos para la creación, activación, modificación e inactivación de cuentas de acceso a TrakCare se realicen de manera segura y trazable.`
+            },
+            "seccion-3": {
+                title: "Alcance",
+                icon: "fas fa-globe",
+                content: `Aplica a todo individuo (planta, contrata, honorarios, alumnos, externos) que requiera el uso del sistema TrakCare para el desempeño de sus funciones en el Hospital Metropolitano.`
+            },
+            "seccion-4": {
+                title: "Definiciones Clave",
+                icon: "fas fa-book",
+                content: `TrakCare: Registro Clínico Electrónico institucional.
+                Unidad de Gestión de la Información: Unidad responsable de la gestión operativa de las cuentas.
+                OSticket: Sistema de gestión de tickets de la Unidad de Gestión de la Información.
+                SSMO: Servicio de Salud Metropolitano Oriente.`
+            },
+            "seccion-5": {
+                title: "Habilitación Institucional",
+                icon: "fas fa-user-check",
+                content: `El acceso es un privilegio para colaboradores validados por RRHH o URAD. Es responsabilidad de la jefatura asegurar que el colaborador tenga su Constancia de Habilitación.`
+            },
+            "seccion-6": {
+                title: "Principios Generales",
+                icon: "fas fa-shield-alt",
+                content: `Menor privilegio: Acceso solo a lo necesario.
+                Trazabilidad: Todas las acciones deben quedar registradas por la Unidad de Gestión de la Información.
+                Confidencialidad: Cumplimiento de normativas legales.`
+            },
+            "seccion-7": {
+                title: "Roles y Responsabilidades",
+                icon: "fas fa-users",
+                content: `Jefatura: Valida la necesidad y firma formularios.
+                Unidad de Gestión de la Información: Recepciona, valida y crea perfiles en TrakCare.
+                Informática: Supervisa el cumplimiento del protocolo y auditorías.`
+            },
+            "seccion-8": {
+                title: "Solicitud de Cuentas Nuevas",
+                icon: "fas fa-clipboard-list",
+                content: `Se debe enviar correo a soporte@hosmet.cl adjuntando la Constancia de Habilitación. La Unidad de Gestión de la Información verificará la documentación y creará el usuario.`
+            },
+            "seccion-9": {
+                title: "Activación de Cuentas",
+                icon: "fas fa-user-plus",
+                content: `Para reactivar cuentas inactivas, la jefatura debe solicitarlo formalmente a la Unidad de Gestión de la Información indicando la vigencia del vínculo laboral.`
+            },
+            "seccion-10": {
+                title: "Inactivación de Cuentas",
+                icon: "fas fa-user-times",
+                content: `Gestión centralizada por la Unidad de Gestión de la Información por cese de funciones o inactividad prolongada para optimizar licencias.`
+            },
+            "seccion-11": {
+                title: "Modificación de Permisos",
+                icon: "fas fa-user-edit",
+                content: `Cambios de rol requieren una nueva solicitud firmada por la jefatura detallando el nuevo perfil técnico necesario.`
+            },
+            "seccion-12": {
+                title: "Gestión de Contraseñas",
+                icon: "fas fa-key",
+                content: `Las credenciales son personales. El reseteo es gestionado exclusivamente por la Unidad de Gestión de la Información tras validar la identidad del usuario.`
+            },
+            "seccion-13": {
+                title: "Capacitación TrakCare",
+                icon: "fas fa-graduation-cap",
+                content: `Obligatoria para todo usuario previo a la entrega de accesos. Asegura el uso funcional y seguro de la plataforma.`
+            },
+            "seccion-14": {
+                title: "Auditoría y Control",
+                icon: "fas fa-chart-line",
+                content: `La Unidad de Gestión de la Información realiza controles mensuales de inactividad y las jefaturas deben validar semestralmente su dotación con acceso.`
+            },
+            "seccion-15": {
+                title: "Flujograma",
+                icon: "fas fa-project-diagram",
+                content: `Inicio -> Habilitación RRHH -> Solicitud a Soporte -> Validación Unidad Gestión Información -> Creación -> Capacitación -> Entrega.`
+            },
+            "seccion-16": {
+                title: "Anexos",
+                icon: "fas fa-paperclip",
+                content: `Incluye Formulario de Solicitud, Acuerdo de Confidencialidad y Formulario de Inactivación.`
             }
-            
-            const paragraphs = text.split('\n\n').filter(p => p.trim());
-            let html = '<div class="space-y-6">';
-            paragraphs.forEach(paragraph => {
-                html += `<div class="content-card-enhanced p-6 rounded-xl"><div class="content-text">${paragraph.replace(/\n/g, '<br>')}</div></div>`;
-            });
-            html += '</div>';
-            return html;
-        }
+        };
 
-        function renderItem(line, icon) {
-            const [term, desc] = line.split(':').map(s => s.trim());
-            return `
-                <div class="definition-card p-4 rounded-lg border-l-4 border-blue-500">
-                    <h4 class="font-bold text-blue-800 text-base mb-2 flex items-center">
-                        <i class="fas ${icon} text-blue-600 mr-2"></i>
-                        ${term}:
-                    </h4>
-                    <p class="content-text text-sm ml-6 leading-relaxed">${desc}</p>
-                </div>
-            `;
-        }
-
-        function generateSidebar() {
-            const nav = document.getElementById('horizontal-nav');
-            let navHTML = '';
+        function generateGridNav() {
+            const nav = document.getElementById('grid-nav');
+            let html = '';
             Object.keys(protocolContent).forEach((key, index) => {
                 const item = protocolContent[key];
-                const shortTitle = item.title.length > 25 ? item.title.substring(0, 22) + '...' : item.title;
-                navHTML += `
-                    <div class="nav-tab ${index === 0 ? 'active' : ''}" onclick="loadContent('${key}')">
-                        <i class="${item.icon}"></i>
-                        <span>${shortTitle}</span>
-                    </div>
-                `;
+                const num = key.split('-')[1];
+                html += `
+                    <div class="nav-tab p-3 flex items-center gap-3 rounded-xl cursor-pointer bg-gray-50 text-gray-700 ${index === 0 ? 'active' : ''}" 
+                         onclick="loadContent('${key}', this)">
+                        <span class="section-number flex-shrink-0 w-7 h-7 flex items-center justify-center rounded-full bg-white border border-gray-200 text-xs font-bold transition-colors">
+                            ${num}
+                        </span>
+                        <span class="text-xs font-medium truncate">${item.title}</span>
+                    </div>`;
             });
-            nav.innerHTML = navHTML;
-            setupNavigationButtons();
+            nav.innerHTML = html;
         }
 
-        function setupNavigationButtons() {
-            document.getElementById('prev-tab').onclick = () => document.getElementById('horizontal-nav').scrollBy({ left: -200, behavior: 'smooth' });
-            document.getElementById('next-tab').onclick = () => document.getElementById('horizontal-nav').scrollBy({ left: 200, behavior: 'smooth' });
-        }
-
-        function loadContent(key) {
+        function loadContent(key, element) {
             const area = document.getElementById('content-area');
-            const section = protocolContent[key];
-            if (section) {
-                area.innerHTML = section.content;
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.innerText.includes(section.title.substring(0, 5))));
-                area.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            const data = protocolContent[key];
+            
+            // Actualizar clase active
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            if(element) element.classList.add('active');
+
+            // Renderizado de contenido
+            area.innerHTML = `
+                <div class="content-card-enhanced p-8 rounded-2xl animate-fade-in">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
+                        <i class="${data.icon} text-blue-600"></i> ${data.title}
+                    </h2>
+                    <div class="text-gray-700 leading-relaxed space-y-4">
+                        ${formatText(data.content)}
+                    </div>
+                </div>`;
         }
 
-        document.addEventListener('DOMContentLoaded', loadProtocolContent);
+        function formatText(text) {
+            // Convierte líneas con ":" en cards de definición automáticamente
+            return text.split('\n').map(line => {
+                if(line.includes(':')) {
+                    const [t, d] = line.split(':');
+                    return `<div class="definition-card p-4 rounded-lg my-2"><b class="text-blue-900">${t.trim()}:</b> ${d.trim()}</div>`;
+                }
+                return `<p>${line.trim()}</p>`;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateGridNav();
+            loadContent('seccion-1', document.querySelector('.nav-tab'));
+        });
     </script>
 </body>
 </html>
