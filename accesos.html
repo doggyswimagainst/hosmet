@@ -32,6 +32,7 @@
             border-bottom-color: #4f46e5;
             color: #4f46e5;
             font-weight: 700;
+            background: rgba(102, 126, 234, 0.05);
         }
         .section-box {
             border-left: 4px solid #e5e7eb;
@@ -42,11 +43,12 @@
         .section-box:hover {
             border-left-color: #667eea;
         }
-        .definition-item {
-            background: #f8fafc;
-            border-radius: 8px;
-            padding: 1rem;
-            border: 1px solid #e2e8f0;
+        .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -140,20 +142,30 @@
 
         function init() {
             const nav = document.getElementById('main-nav');
-            Object.keys(protocolGroups).forEach((key, index) => {
+            const keys = Object.keys(protocolGroups);
+            
+            keys.forEach((key, index) => {
                 const group = protocolGroups[key];
                 const btn = document.createElement('div');
-                btn.className = `nav-tab px-6 py-4 text-sm font-medium text-gray-600 flex items-center gap-2 ${index === 0 ? 'active' : ''}`;
+                // Se asigna ID para facilitar la selección inicial
+                btn.id = `tab-${key}`;
+                btn.className = `nav-tab px-6 py-4 text-sm font-medium text-gray-600 flex items-center gap-2`;
                 btn.innerHTML = `<i class="fas ${group.icon}"></i> ${group.title}`;
-                btn.onclick = () => renderGroup(key, btn);
+                btn.onclick = () => renderGroup(key);
                 nav.appendChild(btn);
             });
-            renderGroup(Object.keys(protocolGroups)[0], nav.firstChild);
+
+            // EJECUCIÓN POR DEFECTO: Carga la primera categoría (Marco y Alcance)
+            if (keys.length > 0) {
+                renderGroup(keys[0]);
+            }
         }
 
-        function renderGroup(key, element) {
+        function renderGroup(key) {
+            // Actualizar estado visual de las pestañas
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            element.classList.add('active');
+            const activeTab = document.getElementById(`tab-${key}`);
+            if (activeTab) activeTab.classList.add('active');
 
             const group = protocolGroups[key];
             const container = document.getElementById('content-area');
@@ -171,7 +183,8 @@
                 `;
             });
 
-            container.innerHTML = `<div class="animate-in fade-in slide-in-from-bottom-4 duration-500">${html}</div>`;
+            // Insertar con animación
+            container.innerHTML = `<div class="animate-in">${html}</div>`;
         }
 
         document.addEventListener('DOMContentLoaded', init);
