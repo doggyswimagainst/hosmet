@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo de Gestión de Accesos- Hospital Metropolitano</title>
+    <title>Protocolo de Gestión de Accesos v2.0 - HOSMET</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #4338ca 100%);
             min-height: 100vh;
         }
         .content-card {
             background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
         .nav-tab {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -25,26 +25,34 @@
             white-space: nowrap;
         }
         .nav-tab:hover {
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(79, 70, 229, 0.05);
             color: #4f46e5;
         }
         .nav-tab.active {
             border-bottom-color: #4f46e5;
             color: #4f46e5;
             font-weight: 700;
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(79, 70, 229, 0.08);
         }
         .section-box {
             border-left: 4px solid #e5e7eb;
             padding-left: 1.5rem;
             margin-bottom: 2rem;
-            transition: border-color 0.3s;
         }
         .section-box:hover {
-            border-left-color: #667eea;
+            border-left-color: #4f46e5;
+        }
+        .badge-prereq {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
         .animate-in {
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeIn 0.4s ease-out forwards;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -55,87 +63,93 @@
 <body class="p-4 md:p-8">
     <div class="max-w-6xl mx-auto">
         <div class="content-card overflow-hidden">
-            <header class="bg-white p-6 border-b flex flex-col md:flex-row justify-between items-center gap-4">
-                <div>
-                    <h1 class="text-2xl font-800 text-gray-800 flex items-center gap-2">
-                        <i class="fas fa-shield-halved text-indigo-600"></i>
-                        Gestión de Accesos
-                    </h1>
-                    <p class="text-sm text-gray-500">Unidad de Gestión de la Información • Hospital Metropolitano</p>
+            <header class="bg-white p-6 border-b flex flex-col md:row justify-between items-center gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="bg-indigo-600 p-3 rounded-lg text-white">
+                        <i class="fas fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-800 text-gray-800">Protocolo de Gestión de Accesos</h1>
+                        <p class="text-sm text-gray-500 font-medium">HOSMET • Versión 2.0 (Febrero 2026) • Ley 21.663</p>
+                    </div>
                 </div>
-                <a href="protocolo.pdf" target="_blank" class="bg-red-50 text-red-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-100 transition flex items-center gap-2">
-                    <i class="fas fa-file-pdf"></i> PDF Oficial
-                </a>
+                <div class="flex gap-2">
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold self-center">VIGENTE</span>
+                    <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-200 transition flex items-center gap-2">
+                        <i class="fas fa-file-pdf text-red-500"></i> Descargar PDF
+                    </button>
+                </div>
             </header>
 
-            <nav class="bg-gray-50 border-b overflow-x-hidden">
-                <div id="main-nav" class="flex flex-wrap justify-center md:justify-start px-4">
+            <nav class="bg-gray-50 border-b overflow-x-auto">
+                <div id="main-nav" class="flex min-w-max px-4">
                     </div>
             </nav>
 
-            <main class="p-6 md:p-10 min-h-[500px]">
+            <main class="p-6 md:p-10 min-h-[550px] bg-white">
                 <div id="content-area" class="max-w-4xl mx-auto">
                     </div>
             </main>
         </div>
 
-        <footer class="mt-6 flex flex-wrap justify-center gap-6 text-white/80 text-sm">
-            <span><i class="fas fa-clock mr-1"></i> Soporte 24/7</span>
-            <span><i class="fas fa-phone mr-1"></i> Anexo: xxxxxx</span>
-            <span><i class="fas fa-envelope mr-1"></i> soporte@hosmet.cl</span>
+        <footer class="mt-6 flex flex-wrap justify-center gap-8 text-white/70 text-sm">
+            <span><i class="fas fa-user-shield mr-1 text-indigo-300"></i> Responsable: Jefe Unidad Gestión de la Información</span>
+            <span><i class="fas fa-envelope mr-1 text-indigo-300"></i> gestionaccesos@hosmet.cl</span>
+            <span><i class="fas fa-microchip mr-1 text-indigo-300"></i> Soporte TI: Anexo XXXX</span>
         </footer>
     </div>
 
     <script>
         const protocolGroups = {
             "marco": {
-                title: "Marco y Alcance",
-                icon: "fa-info-circle",
+                title: "Marco y Cumplimiento",
+                icon: "fa-gavel",
                 sections: [
-                    { t: "Introducción", c: "Este protocolo establece el marco normativo para el ciclo de vida de las cuentas, garantizando integridad y confidencialidad." },
-                    { t: "Objetivo General", c: "Garantizar procedimientos eficientes, seguros y trazables para la creación y gestión de cuentas conforme a políticas institucionales." },
-                    { t: "Alcance Universal", c: "Aplica a todo personal: planta, contrata, honorarios, becados, internos y empresas externas debidamente habilitados." }
+                    { t: "Introducción", c: "Regula el ciclo de vida de identidades digitales bajo la <b>Ley N° 21.663 (Ciberseguridad)</b> y Ley N° 20.584, garantizando confidencialidad e integridad clínica." },
+                    { t: "Objetivo General", c: "Procedimientos eficientes, seguros y trazables para que cada usuario posea <b>únicamente</b> los privilegios mínimos necesarios para su labor." },
+                    { t: "Habilitación Institucional <span class='badge-prereq'>Obligatorio</span>", c: "Prerrequisito universal sin excepciones. Gestionado por RRHH o Unidad RAD. Emite la <b>Constancia de Habilitación</b>, única fuente de verdad para el proceso." }
                 ]
             },
-            "conceptos": {
-                title: "Conceptos Clave",
-                icon: "fa-book",
+            "principios": {
+                title: "Principios y Seguridad",
+                icon: "fa-lock",
                 sections: [
-                    { t: "Definiciones", c: "<b>Unidad de Gestión de la Información:</b> Responsable operativo.<br><b>OSticket:</b> Sistema de gestión de solicitudes (confirmar si habra un sistema).<br><b>Habilitación Institucional:</b> Proceso previo obligatorio realizado por RRHH/URAD." },
-                    { t: "Principios", c: "• Menor privilegio<br>• Individualidad (intransferible)<br>• Justificación funcional<br>• Trazabilidad total." }
+                    { t: "Pilares de Gestión", c: "• <b>Mínimo Privilegio:</b> Acceso restringido al nivel mínimo necesario.<br>• <b>Individualidad:</b> Credenciales personales e intransferibles.<br>• <b>Segregación de Funciones:</b> Roles distintos para solicitar, autorizar y ejecutar." },
+                    { t: "Gestión de Contraseñas", c: "• Mínimo 10 caracteres (Mayús/Minús/Núm/Sim).<br>• Cambio obligatorio cada 90 días.<br>• Bloqueo tras 5 intentos fallidos por 30 minutos." }
                 ]
             },
             "responsabilidades": {
-                title: "Responsabilidades",
-                icon: "fa-users",
+                title: "Roles del Proceso",
+                icon: "fa-users-gear",
                 sections: [
-                    { t: "Roles del Proceso", c: "<b>Jefatura:</b> Valida necesidad y solicita accesos.<br><b>RRHH/URAD:</b> Emite constancia de habilitación.<br><b>Unidad de Gestión de la Información:</b> Crea, modifica e inactiva perfiles.<br><b>Informatica:</b> Audita y define perfiles de seguridad." }
+                    { t: "Jefaturas", c: "Valida necesidad, firma solicitud y supervisa que el colaborador tenga su habilitación institucional. Revisión semestral obligatoria de sus usuarios." },
+                    { t: "Unidad Gestión de la Información", c: "Rol operativo (Mesa de Servicio). Valida documentación, crea perfiles, gestiona reseteos y coordina capacitaciones." },
+                    { t: "Departamento TI", c: "Supervisión normativa, definición de grupos de seguridad y auditorías de logs/seguridad mensuales." }
                 ]
             },
-            "solicitudes": {
-                title: "Trámites y Altas",
-                icon: "fa-file-signature",
+            "flujos": {
+                title: "Altas y Trámites",
+                icon: "fa-diagram-project",
                 sections: [
-                    { t: "Creación de Cuentas", c: "Requiere Constancia de Habilitación y Formulario firmado enviado a soporte@hosmet.cl." },
-                    { t: "Activación de Cuentas", c: "Para personal que retoma funciones, la jefatura debe validar el vínculo vigente mediante ticket." },
-                    { t: "Modificaciones", c: "Cambios de rol requieren nueva justificación técnica y actualización de perfil." }
+                    { t: "Creación de Cuentas (Altas)", c: "Requiere: Constancia de Habilitación + Formulario Único firmado + Acuerdo de Confidencialidad + <b>Capacitación Aprobada</b>." },
+                    { t: "Activación (Retornos)", c: "Para usuarios inactivos que retoman funciones. Si la inactividad supera 90 días, se requiere revalidar habilitación ante RRHH/RAD." },
+                    { t: "Modificaciones (Movers)", c: "Cambios de rol aplican <b>'Reset de Privilegios'</b>: se eliminan permisos anteriores y se configuran de cero para el nuevo servicio." }
                 ]
             },
-            "seguridad": {
-                title: "Seguridad y Claves",
-                icon: "fa-key",
+            "capacitacion": {
+                title: "Capacitación y Hitos",
+                icon: "fa-graduation-cap",
                 sections: [
-                    { t: "Gestión de Contraseñas", c: "Uso de claves seguras con cambio obligatorio al primer ingreso. El bloqueo ocurre tras intentos fallidos; el reseteo lo realiza la Unidad de Gestión de la Información." },
-                    { t: "Inactivación", c: "Ejecutada por cese de funciones o inactividad técnica. Es vital para la seguridad y control de licencias." },
-                    { t: "Capacitación", c: "Es obligatoria y complementaria a la habilitación previa para recibir acceso efectivo." }
+                    { t: "Formación Obligatoria", c: "Posterior a la habilitación y <b>previa</b> al acceso. Incluye uso de HIS, marco legal de ficha clínica y taller de ciberseguridad básica (Phishing/Claves)." },
+                    { t: "Evaluación Técnica", c: "Exige aprobación con mínimo <b>85%</b>. Se emite Certificado Digital cuyo folio es indispensable para activar la cuenta." }
                 ]
             },
             "control": {
-                title: "Control y Anexos",
+                title: "Bajas y Auditoría",
                 icon: "fa-clipboard-check",
                 sections: [
-                    { t: "Auditoría", c: "Revisiones semestrales por jefaturas y mensuales por la Unidad de Gestión de la Información para detectar inactividad." },
-                    { t: "Documentación", c: "Formularios de solicitud, acuerdos de confidencialidad y actas de entrega de credenciales." }
+                    { t: "Inactivación (Leavers)", c: "<b>Inmediata</b> ante desvinculación (máx 24h de reporte). Cuentas sin login por 60 días se bloquean por inactividad técnica." },
+                    { t: "Plan de Auditoría", c: "• <b>Mensual:</b> Cruce de listas vs RRHH y revisión de logs de seguridad.<br>• <b>Trimestral:</b> Auditoría de cuentas con altos privilegios.<br>• <b>Semestral:</b> Validación de usuarios por jefaturas de servicio." }
                 ]
             }
         };
@@ -144,25 +158,20 @@
             const nav = document.getElementById('main-nav');
             const keys = Object.keys(protocolGroups);
             
-            keys.forEach((key, index) => {
+            keys.forEach((key) => {
                 const group = protocolGroups[key];
                 const btn = document.createElement('div');
-                // Se asigna ID para facilitar la selección inicial
                 btn.id = `tab-${key}`;
-                btn.className = `nav-tab px-6 py-4 text-sm font-medium text-gray-600 flex items-center gap-2`;
+                btn.className = `nav-tab px-6 py-4 text-sm font-semibold text-gray-500 flex items-center gap-2`;
                 btn.innerHTML = `<i class="fas ${group.icon}"></i> ${group.title}`;
                 btn.onclick = () => renderGroup(key);
                 nav.appendChild(btn);
             });
 
-            // EJECUCIÓN POR DEFECTO: Carga la primera categoría (Marco y Alcance)
-            if (keys.length > 0) {
-                renderGroup(keys[0]);
-            }
+            if (keys.length > 0) renderGroup(keys[0]);
         }
 
         function renderGroup(key) {
-            // Actualizar estado visual de las pestañas
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             const activeTab = document.getElementById(`tab-${key}`);
             if (activeTab) activeTab.classList.add('active');
@@ -171,19 +180,20 @@
             const container = document.getElementById('content-area');
             
             let html = `<h2 class="text-3xl font-800 text-gray-800 mb-8 flex items-center gap-3">
-                            <i class="fas ${group.icon} text-indigo-500"></i> ${group.title}
+                            <i class="fas ${group.icon} text-indigo-600"></i> ${group.title}
                         </h2>`;
 
             group.sections.forEach(sec => {
                 html += `
                     <div class="section-box">
-                        <h3 class="text-lg font-bold text-indigo-900 mb-2">${sec.t}</h3>
-                        <div class="text-gray-700 leading-relaxed">${sec.c}</div>
+                        <h3 class="text-lg font-bold text-indigo-900 mb-2 flex items-center gap-2">
+                            ${sec.t}
+                        </h3>
+                        <div class="text-gray-600 leading-relaxed text-md">${sec.c}</div>
                     </div>
                 `;
             });
 
-            // Insertar con animación
             container.innerHTML = `<div class="animate-in">${html}</div>`;
         }
 
