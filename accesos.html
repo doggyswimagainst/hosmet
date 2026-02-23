@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo de Gestión de Accesos - HOSMET</title>
+    <title>Gestión de Identidades - HOSMET</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .sidebar-link.active { background-color: #1e40af; border-left: 4px solid #60a5fa; }
+        .sidebar-link.active { background-color: #1e40af; border-left: 4px solid #60a5fa; color: white; }
         .content-section { display: none; }
-        .content-section.active { display: block; animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .content-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         details summary::-webkit-details-marker { display: none; }
     </style>
 </head>
@@ -21,231 +21,278 @@
     <header class="fixed top-0 w-full bg-blue-900 text-white z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <i data-lucide="hospital" class="w-8 h-8 text-blue-300"></i>
+                <i data-lucide="shield-check" class="w-8 h-8 text-blue-300"></i>
                 <div>
                     <h1 class="font-bold text-lg leading-none">HOSMET</h1>
-                    <p class="text-xs text-blue-200 uppercase tracking-tighter">Gestión de Identidades Digitales</p>
+                    <p class="text-xs text-blue-200 uppercase tracking-widest">Protocolo de Gestión de Accesos</p>
                 </div>
             </div>
-            <a href="protocolo.pdf" download class="flex items-center space-x-2 bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg transition text-sm font-medium">
-                <i data-lucide="download" class="w-4 h-4"></i>
-                <span>Descargar Protocolo (PDF)</span>
+            <a href="protocolo.pdf" download class="flex items-center space-x-2 bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg transition text-sm font-medium border border-blue-500/30">
+                <i data-lucide="file-down" class="w-4 h-4"></i>
+                <span>protocolo.pdf</span>
             </a>
         </div>
     </header>
 
     <div class="flex pt-16 h-screen overflow-hidden">
-        <nav class="w-72 bg-slate-900 text-slate-300 overflow-y-auto hidden md:block border-r border-slate-800">
-            <div class="p-4 border-b border-slate-800">
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest">Protocolo v2.0</p>
+        <nav class="w-72 bg-slate-900 text-slate-400 overflow-y-auto hidden md:block border-r border-slate-800">
+            <div class="p-6">
+                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Navegación Principal</p>
+                <ul class="space-y-2" id="sidebar-menu">
+                    <li><button onclick="showSection('intro')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition active"><i data-lucide="home" class="w-4 h-4"></i><span>Generalidades</span></button></li>
+                    <li><button onclick="showSection('habilitacion')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="user-plus" class="w-4 h-4"></i><span>Habilitación Previa</span></button></li>
+                    <li><button onclick="showSection('roles')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition font-medium text-blue-400"><i data-lucide="users" class="w-4 h-4"></i><span>Roles y Responsabilidades</span></button></li>
+                    <li><button onclick="showSection('ciclo')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="refresh-cw" class="w-4 h-4"></i><span>Ciclo de Gestión</span></button></li>
+                    <li><button onclick="showSection('seguridad')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="lock" class="w-4 h-4"></i><span>Seguridad y Contraseñas</span></button></li>
+                    <li><button onclick="showSection('control')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="eye" class="w-4 h-4"></i><span>Auditoría y Control</span></button></li>
+                    <li><button onclick="showSection('anexos')" class="sidebar-link w-full text-left p-3 rounded-lg flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="folder-kanban" class="w-4 h-4"></i><span>Repositorio de Anexos</span></button></li>
+                </ul>
             </div>
-            <ul class="p-2 space-y-1" id="sidebar-menu">
-                <li><button onclick="showSection('intro')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition active"><i data-lucide="info" class="w-4 h-4"></i><span>Introducción</span></button></li>
-                <li><button onclick="showSection('habilitacion')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition text-blue-400 font-semibold"><i data-lucide="shield-check" class="w-4 h-4"></i><span>Habilitación Unificada</span></button></li>
-                <li><button onclick="showSection('roles')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="briefcase" class="w-4 h-4"></i><span>Roles y Responsabilidades</span></button></li>
-                <li><button onclick="showSection('flujo')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="git-pull-request" class="w-4 h-4"></i><span>Flujograma de Gestión</span></button></li>
-                <li><button onclick="showSection('passwords')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="key" class="w-4 h-4"></i><span>Seguridad y Password</span></button></li>
-                <li><button onclick="showSection('anexos')" class="sidebar-link w-full text-left p-3 rounded flex items-center space-x-3 hover:bg-slate-800 transition"><i data-lucide="files" class="w-4 h-4"></i><span>Anexos</span></button></li>
-            </ul>
         </nav>
 
-        <main class="flex-1 overflow-y-auto p-8 lg:p-12">
+        <main class="flex-1 overflow-y-auto p-8 lg:p-12 bg-white">
             <div class="max-w-4xl mx-auto">
                 
                 <section id="intro" class="content-section active space-y-6">
-                    <h2 class="text-3xl font-bold text-blue-900 border-b-2 border-blue-100 pb-2">Introducción</h2>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <p class="text-slate-700 leading-relaxed">Esta WEB representa el <strong>Protocolo de Gestión de Accesos</strong> del Hospital Metropolitano de Santiago, diseñado para cumplir con la Ley Marco de Ciberseguridad (21.663) y asegurar la protección de datos sensibles mediante el control estricto de identidades.</p>
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Generalidades del Protocolo</h2>
+                    </div>
+                    <div class="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-4">
+                        <p>El Hospital Metropolitano de Santiago (HOSMET) establece este marco normativo para regular el ciclo de vida completo de las identidades digitales, garantizando el cumplimiento de la <strong>Ley Marco de Ciberseguridad (21.663)</strong> y la protección de datos sensibles de los pacientes.</p>
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                            <p class="text-sm text-blue-800 font-medium">Este protocolo es transversal y obligatorio para todo personal de planta, contrata, honorarios, reemplazos, becados, internos, estudiantes y empresas externas.</p>
+                        </div>
                     </div>
                 </section>
 
                 <section id="habilitacion" class="content-section space-y-6">
-                    <div class="bg-gradient-to-br from-blue-900 to-blue-800 text-white p-8 rounded-2xl shadow-xl">
-                        <h2 class="text-2xl font-bold mb-4">5. Habilitación Institucional Unificada</h2>
-                        <p class="mb-6 text-blue-100">La "Habilitación" es el paso cero. Nadie puede solicitar una cuenta de sistema sin estar previamente habilitado administrativamente por RRHH o RAD.</p>
-                        <div class="bg-white/10 p-4 rounded-lg backdrop-blur-sm border border-white/20">
-                            <p class="text-sm"><strong>Entregable:</strong> Constancia de Habilitación Institucional (Anexo F).</p>
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Habilitación Institucional Unificada</h2>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-8 rounded-2xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-3 flex items-center"><i data-lucide="alert-circle" class="mr-2"></i> Prerrequisito Obligatorio</h3>
+                        <p class="text-blue-100 mb-6">La habilitación es el acto administrativo que certifica el vínculo legal del colaborador con la institución. Es la "fuente de verdad" previa a cualquier solicitud técnica.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                                <h4 class="font-bold text-blue-300">Vía RRHH</h4>
+                                <p class="text-xs">Para funcionarios, honorarios, reemplazos y personal de empresas externas.</p>
+                            </div>
+                            <div class="bg-white/10 p-4 rounded-xl border border-white/20">
+                                <h4 class="font-bold text-blue-300">Vía Unidad RAD</h4>
+                                <p class="text-xs">Para becados, internos, residentes y estudiantes de pregrado en práctica.</p>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <section id="roles" class="content-section space-y-6">
-                    <h2 class="text-3xl font-bold text-blue-900 border-b-2 border-blue-100 pb-2">7. Roles y Responsabilidades Detalladas</h2>
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Roles y Responsabilidades</h2>
+                    </div>
                     
-                    <div class="space-y-4">
-                        <details class="bg-white border border-slate-200 rounded-xl group overflow-hidden shadow-sm">
-                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-600 group-open:text-white transition-all">
-                                <span class="flex items-center"><i data-lucide="users" class="mr-3 w-5 h-5"></i>DEPARTAMENTO DE RECURSOS HUMANOS</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
+                    <div class="space-y-3">
+                        <details class="bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden">
+                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-800 group-open:text-white transition-all">
+                                <span class="flex items-center uppercase text-sm tracking-wide"><i data-lucide="building-2" class="mr-3 w-5 h-5"></i>Departamento de Recursos Humanos</span>
+                                <i data-lucide="plus" class="w-4 h-4 group-open:rotate-45 transition-transform"></i>
                             </summary>
                             <div class="p-6 text-sm text-slate-600 bg-white space-y-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="border-l-2 border-blue-200 pl-4">
-                                        <h4 class="font-bold text-blue-800 mb-2">Ingreso y Registro</h4>
-                                        <p>Responsable de validar la identidad y el vínculo contractual (Planta, Contrata, Honorarios, Terceros).</p>
-                                    </div>
-                                    <div class="border-l-2 border-blue-200 pl-4">
-                                        <h4 class="font-bold text-blue-800 mb-2">Certificación</h4>
-                                        <p>Emite la <strong>Constancia de Habilitación Institucional</strong>, requisito sine qua non para el acceso.</p>
-                                    </div>
-                                    <div class="border-l-2 border-blue-200 pl-4">
-                                        <h4 class="font-bold text-blue-800 mb-2">Gestión de Egresos</h4>
-                                        <p>Notifica formalmente el cese de funciones para la inactivación inmediata de cuentas.</p>
-                                    </div>
-                                    <div class="border-l-2 border-blue-200 pl-4">
-                                        <h4 class="font-bold text-blue-800 mb-2">Auditoría</h4>
-                                        <p>Provee mensualmente el listado de personal vigente para cruces de seguridad.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                        <details class="bg-white border border-slate-200 rounded-xl group overflow-hidden shadow-sm">
-                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-600 group-open:text-white transition-all">
-                                <span class="flex items-center"><i data-lucide="graduation-cap" class="mr-3 w-5 h-5"></i>UNIDAD RAD (ASISTENCIAL DOCENTE)</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="p-6 text-sm text-slate-600 bg-white space-y-4">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div class="border-l-2 border-indigo-200 pl-4">
-                                        <h4 class="font-bold text-indigo-800 mb-2">Control de Formación</h4>
-                                        <p>Valida convenios docentes y acredita a becados, internos y estudiantes en práctica.</p>
-                                    </div>
-                                    <div class="border-l-2 border-indigo-200 pl-4">
-                                        <h4 class="font-bold text-indigo-800 mb-2">Vigencia Temporal</h4>
-                                        <p>Define las fechas exactas de rotación, asegurando que el acceso caduque al finalizar la pasantía.</p>
-                                    </div>
-                                    <div class="border-l-2 border-indigo-200 pl-4">
-                                        <h4 class="font-bold text-indigo-800 mb-2">Custodia Documental</h4>
-                                        <p>Mantiene el registro de los compromisos de confidencialidad del personal académico y en formación.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </details>
-
-                        <details class="bg-white border border-slate-200 rounded-xl group overflow-hidden shadow-sm">
-                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-600 group-open:text-white transition-all">
-                                <span class="flex items-center"><i data-lucide="briefcase" class="mr-3 w-5 h-5"></i>JEFATURA DE SERVICIO / UNIDAD</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="p-6 text-sm text-slate-600 bg-white space-y-4">
-                                <p class="font-semibold text-slate-800">Actúa como el "Dueño del Proceso" en su área:</p>
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Determinación de Necesidad:</strong> Define qué perfiles y sistemas requiere el colaborador según su función real.</li>
-                                    <li><strong>Formalización:</strong> Firma el <strong>Anexo A</strong> (Solicitud) y asegura la firma del <strong>Anexo C</strong> (Confidencialidad).</li>
-                                    <li><strong>Supervisión Directa:</strong> Notifica de inmediato (máx. 24h) traslados, licencias prolongadas o renuncias.</li>
-                                    <li><strong>Recertificación:</strong> Ejecuta la revisión semestral de privilegios para eliminar accesos innecesarios.</li>
+                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <li class="p-3 bg-slate-50 rounded-lg"><strong>Acreditación Contractual:</strong> Validar la identidad y vigencia del contrato de cada colaborador.</li>
+                                    <li class="p-3 bg-slate-50 rounded-lg"><strong>Emisión de Constancia:</strong> Generar el Anexo F como documento habilitador único.</li>
+                                    <li class="p-3 bg-slate-50 rounded-lg"><strong>Gestión de Bajas:</strong> Notificar el cese de funciones de forma inmediata a Gestión de Información.</li>
+                                    <li class="p-3 bg-slate-50 rounded-lg"><strong>Auditoría de Planta:</strong> Proveer listados mensuales de personal activo para cruces de seguridad.</li>
                                 </ul>
                             </div>
                         </details>
 
-                        <details class="bg-white border border-slate-200 rounded-xl group overflow-hidden shadow-sm">
-                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-600 group-open:text-white transition-all">
-                                <span class="flex items-center"><i data-lucide="shield-check" class="mr-3 w-5 h-5"></i>UNIDAD DE GESTIÓN DE LA INFORMACIÓN</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
+                        <details class="bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden">
+                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-800 group-open:text-white transition-all">
+                                <span class="flex items-center uppercase text-sm tracking-wide"><i data-lucide="graduation-cap" class="mr-3 w-5 h-5"></i>Unidad RAD (Asistencial Docente)</span>
+                                <i data-lucide="plus" class="w-4 h-4 group-open:rotate-45 transition-transform"></i>
                             </summary>
                             <div class="p-6 text-sm text-slate-600 bg-white space-y-4">
-                                <p class="font-semibold text-slate-800">Responsable Técnico-Normativo:</p>
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Validación de Integridad:</strong> Verifica que toda solicitud traiga Habilitación, Anexo A, Anexo C y Certificado de Capacitación.</li>
-                                    <li><strong>Ejecución Técnica:</strong> Crea, modifica o inactiva las cuentas en HIS, ERP, RIS-PACS, etc.</li>
-                                    <li><strong>Custodia de Logs:</strong> Asegura la trazabilidad de quién pidió, quién autorizó y quién creó el acceso.</li>
-                                    <li><strong>Control de Inactividad:</strong> Inactiva automáticamente cuentas sin uso por más de 60 días.</li>
+                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <li class="p-3 bg-indigo-50 rounded-lg"><strong>Gestión de Convenios:</strong> Validar el ingreso de personal en formación según cupos universitarios.</li>
+                                    <li class="p-3 bg-indigo-50 rounded-lg"><strong>Control de Rotaciones:</strong> Definir fechas de inicio y término exactas para la vigencia de accesos.</li>
+                                    <li class="p-3 bg-indigo-50 rounded-lg"><strong>Custodia Ética:</strong> Mantener los acuerdos de confidencialidad de estudiantes e internos.</li>
+                                    <li class="p-3 bg-indigo-50 rounded-lg"><strong>Habilitación RAD:</strong> Emitir la constancia de habilitación institucional para el ámbito docente.</li>
                                 </ul>
                             </div>
                         </details>
 
-                        <details class="bg-white border border-slate-200 rounded-xl group overflow-hidden shadow-sm">
-                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-600 group-open:text-white transition-all">
-                                <span class="flex items-center"><i data-lucide="user" class="mr-3 w-5 h-5"></i>COLABORADOR (USUARIO FINAL)</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 group-open:rotate-180 transition-transform"></i>
+                        <details class="bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden">
+                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-800 group-open:text-white transition-all">
+                                <span class="flex items-center uppercase text-sm tracking-wide"><i data-lucide="user-check" class="mr-3 w-5 h-5"></i>Jefaturas de Servicio y Unidad</span>
+                                <i data-lucide="plus" class="w-4 h-4 group-open:rotate-45 transition-transform"></i>
                             </summary>
-                            <div class="p-6 text-sm text-slate-600 bg-white space-y-4">
-                                <ul class="list-disc list-inside space-y-2">
-                                    <li><strong>Capacitación Obligatoria:</strong> Debe aprobar la evaluación técnica/ética con un mínimo de 85%.</li>
-                                    <li><strong>Uso Personal:</strong> Prohibición absoluta de compartir credenciales o permitir el uso de su sesión abierta por terceros.</li>
-                                    <li><strong>Resguardo de Activos:</strong> Responsable legal de toda acción realizada bajo su nombre de usuario.</li>
-                                    <li><strong>Reporte de Incidentes:</strong> Informar si sospecha que su contraseña ha sido comprometida.</li>
-                                </ul>
+                            <div class="p-6 text-sm text-slate-600 bg-white space-y-3">
+                                <p>• <strong>Definición de Perfil:</strong> Determinar qué sistemas y permisos específicos requiere el colaborador.</p>
+                                <p>• <strong>Solicitud Formal:</strong> Firmar y tramitar el Anexo A, adjuntando la habilitación de RRHH/RAD.</p>
+                                <p>• <strong>Supervisión de Privilegios:</strong> Revisar semestralmente los accesos de su personal y solicitar ajustes.</p>
+                                <p>• <strong>Notificación Inmediata:</strong> Informar cambios de rol, traslados o licencias mayores a 15 días.</p>
+                            </div>
+                        </details>
+
+                        <details class="bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden">
+                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-800 group-open:text-white transition-all">
+                                <span class="flex items-center uppercase text-sm tracking-wide"><i data-lucide="cpu" class="mr-3 w-5 h-5"></i>Unidad de Gestión de la Información</span>
+                                <i data-lucide="plus" class="w-4 h-4 group-open:rotate-45 transition-transform"></i>
+                            </summary>
+                            <div class="p-6 text-sm text-slate-600 bg-white space-y-3">
+                                <p>• <strong>Validación de Requisitos:</strong> Verificar que la solicitud incluya Habilitación, Capacitación y Confidencialidad.</p>
+                                <p>• <strong>Ejecución Técnica:</strong> Crear, modificar o inactivar cuentas en HIS, ERP, RIS y otros sistemas.</p>
+                                <p>• <strong>Gestión de Logs:</strong> Garantizar la trazabilidad de cada acción sobre las identidades digitales.</p>
+                                <p>• <strong>Control de Inactividad:</strong> Inhabilitar automáticamente cuentas sin uso por 60 días.</p>
+                            </div>
+                        </details>
+
+                        <details class="bg-slate-50 border border-slate-200 rounded-xl group overflow-hidden">
+                            <summary class="p-4 font-bold cursor-pointer list-none flex justify-between items-center group-open:bg-blue-800 group-open:text-white transition-all">
+                                <span class="flex items-center uppercase text-sm tracking-wide"><i data-lucide="fingerprint" class="mr-3 w-5 h-5"></i>Colaborador / Usuario Final</span>
+                                <i data-lucide="plus" class="w-4 h-4 group-open:rotate-45 transition-transform"></i>
+                            </summary>
+                            <div class="p-6 text-sm text-slate-600 bg-white space-y-3">
+                                <p>• <strong>Responsabilidad Legal:</strong> Custodiar sus credenciales como personales e intransferibles.</p>
+                                <p>• <strong>Capacitación:</strong> Aprobar la evaluación técnica y ética con un mínimo de 85%.</p>
+                                <p>• <strong>Uso Ético:</strong> No permitir el uso de su sesión por terceros y cerrar sesión al retirarse.</p>
                             </div>
                         </details>
                     </div>
                 </section>
 
-                <section id="flujo" class="content-section space-y-6">
-                    <h2 class="text-3xl font-bold text-blue-900 border-b-2 border-blue-100 pb-2">15. Flujograma General (Resumen)</h2>
-                    <div class="bg-blue-50 p-6 rounded-2xl border-2 border-dashed border-blue-200">
-                        <div class="flex flex-col space-y-4">
-                            <div class="flex items-center space-x-4"><div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">H</div><p class="text-sm font-bold">HABILITACIÓN (RRHH/RAD)</p></div>
-                            <div class="ml-4 border-l-2 border-blue-200 pl-8 space-y-4">
-                                <div class="flex items-center space-x-4"><div class="w-8 h-8 rounded-full bg-slate-400 text-white flex items-center justify-center font-bold">S</div><p class="text-sm">SOLICITUD (Jefatura - Anexo A)</p></div>
-                                <div class="flex items-center space-x-4"><div class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">C</div><p class="text-sm">CAPACITACIÓN (Aprobación 85%)</p></div>
-                                <div class="flex items-center space-x-4"><div class="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold">A</div><p class="text-sm font-bold">ACTIVACIÓN (Gestión Información)</p></div>
-                            </div>
+                <section id="ciclo" class="content-section space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Flujo de Gestión (Ciclo de Vida)</h2>
+                    </div>
+                    <div class="relative pl-8 border-l-2 border-blue-100 space-y-12">
+                        <div class="relative">
+                            <div class="absolute -left-[41px] top-0 w-5 h-5 bg-blue-600 rounded-full border-4 border-white shadow"></div>
+                            <h4 class="font-bold text-blue-900">1. Habilitación</h4>
+                            <p class="text-sm text-slate-500">RRHH o RAD emite la Constancia Institucional (Anexo F).</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[41px] top-0 w-5 h-5 bg-slate-300 rounded-full border-4 border-white shadow"></div>
+                            <h4 class="font-bold text-slate-800">2. Solicitud y Confidencialidad</h4>
+                            <p class="text-sm text-slate-500">Jefatura firma Anexo A y Colaborador firma Anexo C.</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[41px] top-0 w-5 h-5 bg-amber-500 rounded-full border-4 border-white shadow"></div>
+                            <h4 class="font-bold text-amber-800">3. Capacitación Obligatoria</h4>
+                            <p class="text-sm text-slate-500">Aprobación de examen HIS/Ciberseguridad (85% min).</p>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute -left-[41px] top-0 w-5 h-5 bg-green-600 rounded-full border-4 border-white shadow"></div>
+                            <h4 class="font-bold text-green-800">4. Activación de Cuentas</h4>
+                            <p class="text-sm text-slate-500">Gestión de Info. activa accesos y entrega credenciales.</p>
                         </div>
                     </div>
                 </section>
 
-                <section id="passwords" class="content-section space-y-6">
-                    <h2 class="text-3xl font-bold text-blue-900 border-b-2 border-blue-100 pb-2">12. Gestión de Contraseñas</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
-                            <h4 class="font-bold flex items-center text-blue-800 mb-4"><i data-lucide="shield-check" class="mr-2"></i> Estándar de Fuerza</h4>
-                            <ul class="text-sm space-y-2 text-slate-600">
-                                <li>• Mínimo 10 caracteres.</li>
-                                <li>• Alfanumérica + Símbolos.</li>
-                                <li>• No contener RUN ni Nombres.</li>
-                                <li>• Cambio obligatorio cada 90 días.</li>
-                            </ul>
+                <section id="seguridad" class="content-section space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Estándares de Seguridad</h2>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                            <i data-lucide="key-round" class="w-8 h-8 text-blue-600 mb-4"></i>
+                            <h4 class="font-bold mb-2">Password</h4>
+                            <p class="text-xs text-slate-600">10 caracteres mín., combinación de tipos, sin datos personales.</p>
                         </div>
-                        <div class="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
-                            <h4 class="font-bold flex items-center text-red-800 mb-4"><i data-lucide="alert-triangle" class="mr-2"></i> Bloqueos</h4>
-                            <ul class="text-sm space-y-2 text-slate-600">
-                                <li>• 5 intentos fallidos = Bloqueo.</li>
-                                <li>• 60 días sin uso = Inactivación.</li>
-                                <li>• Primer inicio = Cambio Obligatorio.</li>
-                            </ul>
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                            <i data-lucide="history" class="w-8 h-8 text-blue-600 mb-4"></i>
+                            <h4 class="font-bold mb-2">Rotación</h4>
+                            <p class="text-xs text-slate-600">Cambio obligatorio cada 90 días y en el primer inicio.</p>
                         </div>
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
+                            <i data-lucide="shield-off" class="w-8 h-8 text-red-600 mb-4"></i>
+                            <h4 class="font-bold mb-2">Bloqueos</h4>
+                            <p class="text-xs text-slate-600">5 intentos fallidos o 60 días de inactividad técnica.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="control" class="content-section space-y-6">
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Auditoría y Control</h2>
+                    </div>
+                    <div class="overflow-hidden border border-slate-200 rounded-xl">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-slate-50 border-b border-slate-200 text-slate-500">
+                                <tr>
+                                    <th class="p-4 font-semibold">Actividad</th>
+                                    <th class="p-4 font-semibold">Responsable</th>
+                                    <th class="p-4 font-semibold">Frecuencia</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="p-4">Cruce Cuentas vs RRHH</td>
+                                    <td class="p-4">Gestión de Información</td>
+                                    <td class="p-4 font-medium">Mensual</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4">Revisión de Privilegios</td>
+                                    <td class="p-4">Jefaturas de Servicio</td>
+                                    <td class="p-4 font-medium">Semestral</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4">Auditoría de Logs Críticos</td>
+                                    <td class="p-4">TI / Ciberseguridad</td>
+                                    <td class="p-4 font-medium">Aleatoria</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 
                 <section id="anexos" class="content-section space-y-6">
-                    <h2 class="text-3xl font-bold text-blue-900 border-b-2 border-blue-100 pb-2">16. Anexos</h2>
+                    <div class="border-b border-slate-100 pb-4">
+                        <h2 class="text-3xl font-extrabold text-blue-900 tracking-tight">Repositorio de Anexos</h2>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="p-4 bg-white border border-slate-200 rounded-lg flex justify-between items-center">
-                            <span class="text-sm font-medium">Anexo A: Solicitud de Acceso</span>
-                            <i data-lucide="file-text" class="text-blue-500 w-5 h-5"></i>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:border-blue-300 transition-colors flex justify-between items-center group">
+                            <span class="text-sm font-medium text-slate-700">Anexo A: Solicitud Unificada de Acceso</span>
+                            <i data-lucide="file-text" class="text-slate-400 group-hover:text-blue-500 w-5 h-5"></i>
                         </div>
-                        <div class="p-4 bg-white border border-slate-200 rounded-lg flex justify-between items-center">
-                            <span class="text-sm font-medium">Anexo C: Confidencialidad</span>
-                            <i data-lucide="lock" class="text-amber-500 w-5 h-5"></i>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:border-blue-300 transition-colors flex justify-between items-center group">
+                            <span class="text-sm font-medium text-slate-700">Anexo C: Acuerdo de Confidencialidad</span>
+                            <i data-lucide="lock" class="text-slate-400 group-hover:text-amber-500 w-5 h-5"></i>
                         </div>
-                        <div class="p-4 bg-white border border-slate-200 rounded-lg flex justify-between items-center">
-                            <span class="text-sm font-medium">Anexo D: Certificado Capacitación</span>
-                            <i data-lucide="award" class="text-green-500 w-5 h-5"></i>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:border-blue-300 transition-colors flex justify-between items-center group">
+                            <span class="text-sm font-medium text-slate-700">Anexo D: Certificado de Capacitación</span>
+                            <i data-lucide="award" class="text-slate-400 group-hover:text-green-500 w-5 h-5"></i>
                         </div>
-                        <div class="p-4 bg-white border border-slate-200 rounded-lg flex justify-between items-center">
-                            <span class="text-sm font-medium">Anexo F: Constancia Habilitación</span>
-                            <i data-lucide="user-check" class="text-blue-900 w-5 h-5"></i>
+                        <div class="p-4 border border-slate-200 rounded-xl hover:border-blue-300 transition-colors flex justify-between items-center group">
+                            <span class="text-sm font-medium text-slate-700">Anexo F: Constancia de Habilitación</span>
+                            <i data-lucide="user-check" class="text-slate-400 group-hover:text-blue-900 w-5 h-5"></i>
                         </div>
                     </div>
                 </section>
 
             </div>
             
-            <footer class="mt-20 border-t border-slate-200 pt-8 text-center text-slate-400 text-[10px] pb-12 uppercase tracking-widest">
-                Hospital Metropolitano de Santiago - Seguridad de la Información © 2026
+            <footer class="mt-24 border-t border-slate-100 pt-8 text-center text-slate-400 text-[10px] pb-12 uppercase tracking-[0.3em]">
+                HOSMET - Departamento de Transformación Digital © 2026
             </footer>
         </main>
     </div>
 
     <script>
+        // Iniciar Iconos
         lucide.createIcons();
+
+        // Lógica de Navegación
         function showSection(sectionId) {
+            // Secciones
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+
+            // Sidebar
             document.querySelectorAll('.sidebar-link').forEach(b => b.classList.remove('active'));
             event.currentTarget.classList.add('active');
+
+            // Scroll al inicio
             document.querySelector('main').scrollTop = 0;
         }
     </script>
