@@ -1,230 +1,292 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoja de Ruta Ciberseguridad HOSMET 2026</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
-        
-        body { 
-            font-family: 'Inter', system-ui, sans-serif; 
-            background-color: #f1f5f9; /* Fondo ligeramente más oscuro para resaltar tarjetas */
-            color: #0f172a; /* Slate 900 para contraste máximo */
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Plan Operativo 2026 - HOSMET SEC</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style type="text/tailwindcss">
+        :root {
+            --charcoal: #0a0c10;
+            --neon-blue: #00f2ff;
+            --emerald-green: #10b981;
+            --deep-accent: #0f172a;
         }
-
-        .custom-scroll::-webkit-scrollbar { width: 6px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        .task-card {
-            transition: all 0.2s ease-in-out;
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--charcoal);
+            color: #f8fafc;
+            overflow-x: hidden;
+            font-size: 18px;
         }
-
-        .section-urgent {
-            border-left: 6px solid #dc2626 !important;
+        .bg-grid-pattern {
+            background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.07) 1px, transparent 0);
+            background-size: 50px 50px;
         }
-
-        .detail-appear {
-            animation: fadeInRight 0.3s ease-out;
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(15px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
+        .text-glow-blue { text-shadow: 0 0 30px rgba(0, 242, 255, 0.6); }
+        details > summary { list-style: none; outline: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        .inst-link:hover { color: #ffffff; text-decoration: underline; }
     </style>
 </head>
-<body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo } = React;
+<body class="min-h-screen">
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute inset-0 bg-grid-pattern"></div>
+        <div
+            class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[var(--neon-blue)] opacity-[0.04] blur-[150px] rounded-full">
+        </div>
+    </div>
 
-        const App = () => {
-            const [activities, setActivities] = useState([]);
-            const [filter, setFilter] = useState('Todos');
-            const [selectedTask, setSelectedTask] = useState(null);
-            const [loading, setLoading] = useState(true);
+    <nav class="fixed top-0 w-full z-50 px-10 py-6 flex justify-between items-center glass-card border-t-0 border-x-0">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-[var(--neon-blue)] text-4xl">shield</span>
+            <span class="font-bold tracking-tight text-2xl">HOSMET <span
+                    class="text-[var(--neon-blue)]">SEC</span></span>
+        </div>
+        <div class="hidden md:flex items-center gap-12 text-sm font-black tracking-widest uppercase text-slate-200">
+            <a class="hover:text-[var(--neon-blue)] transition-colors" href="#home">Home</a>
+            <a class="hover:text-[var(--neon-blue)] transition-colors" href="#pilares">Pilares</a>
+            <a class="hover:text-[var(--neon-blue)] transition-colors" href="#fases">Fases</a>
+            <a class="hover:text-[var(--neon-blue)] transition-colors" href="#matriz">Instrumentos</a>
+            <a class="hover:text-[var(--neon-blue)] transition-colors" href="#cronograma">Cronograma</a>
+        </div>
+    </nav>
 
-            useEffect(() => {
-                const loadData = async () => {
-                    try {
-                        const response = await fetch('tareas.html');
-                        const text = await response.text();
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(text, 'text/html');
-                        const rows = Array.from(doc.querySelectorAll('tr')).slice(1);
+    <header class="relative pt-64 pb-32 px-10 flex flex-col items-center text-center max-w-6xl mx-auto" id="home">
+        <div
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--emerald-green)]/30 bg-[var(--emerald-green)]/5 text-[var(--emerald-green)] text-xs font-bold mb-10 tracking-widest uppercase">
+            <span class="relative flex h-2 w-2">
+                <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--emerald-green)] opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--emerald-green)]"></span>
+            </span>
+            Estrategia de Seguridad Clínica
+        </div>
+        <h2
+            class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tighter mb-8 bg-gradient-to-b from-white via-white to-slate-500 bg-clip-text text-transparent">
+            Ciberseguridad:<br />
+            <span class="text-[var(--neon-blue)] text-glow-blue">Consolidar una infraestructura crítica de salud
+                ciber-resiliente que asegure la continuidad operativa, la integridad de los datos y la confianza
+                pública</span>
+        </h2>
+        <p class="text-xl md:text-2xl text-slate-400 font-light max-w-4xl mb-12">
+            Plan Operativo 2026, Detalles Semestre 1, 2026 | Hospital Metropolitano
+        </p>
+        <div class="flex flex-col md:flex-row gap-6">
+            <a href="#fases"
+                class="px-10 py-5 bg-[var(--neon-blue)] text-charcoal font-black rounded-xl hover:scale-105 transition-transform uppercase tracking-widest text-sm">
+                Explorar Hoja de Ruta
+            </a>
+            <a href="https://docs.google.com/document/d/1N5XWI1RYeiobigCWf-QKNFQ_YScYWo4VdqepSaDCITw/edit?usp=drive_link"
+                target="_blank"
+                class="px-10 py-5 glass-card border-white/10 font-black rounded-xl hover:bg-white/5 transition-all uppercase tracking-widest text-sm">
+                Descargar Plan
+            </a>
+        </div>
+    </header>
 
-                        const data = rows.map((row, index) => {
-                            const name = row.querySelector('.cell-title')?.innerText.trim();
-                            if (!name) return null;
-                            const sectionRaw = row.querySelector('.cell-\\;h\\]e')?.innerText.trim() || "General";
-                            const cleanSection = sectionRaw.replace(/[🟦]/g, '').trim();
+    <section class="py-32 px-10 max-w-7xl mx-auto" id="pilares">
+        <div class="flex flex-col items-center mb-24">
+            <h2 class="text-5xl font-extrabold mb-6 tracking-tight">Los 4 Pilares Estratégicos</h2>
+            <div class="h-1.5 w-32 bg-[var(--neon-blue)] rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div
+                class="glass-card p-10 rounded-3xl flex flex-col gap-8 border-transparent hover:border-[var(--neon-blue)] transition-all group">
+                <span class="material-symbols-outlined text-[var(--neon-blue)] text-5xl">monitor_heart</span>
+                <h3 class="text-2xl font-bold">Disponibilidad Asistencial</h3>
+                <p class="text-lg text-slate-300 leading-relaxed">Garantizar continuidad en RCE, RIS-PACS, LIS y
+                    equipamiento médico crítico.</p>
+            </div>
+            <div
+                class="glass-card p-10 rounded-3xl flex flex-col gap-8 border-transparent hover:border-[var(--emerald-green)] transition-all group">
+                <span class="material-symbols-outlined text-[var(--emerald-green)] text-5xl">verified_user</span>
+                <h3 class="text-2xl font-bold">Integridad Clínica</h3>
+                <p class="text-lg text-slate-300 leading-relaxed">Evitar alteraciones que induzcan a errores en la
+                    atención y asegurar integridad de datos.</p>
+            </div>
+            <div
+                class="glass-card p-10 rounded-3xl flex flex-col gap-8 border-transparent hover:border-[var(--neon-blue)] transition-all group">
+                <span class="material-symbols-outlined text-slate-200 text-5xl">lock</span>
+                <h3 class="text-2xl font-bold">Privacidad Datos</h3>
+                <p class="text-lg text-slate-300 leading-relaxed">Confidencialidad absoluta bajo Ley de Derechos y Nueva
+                    Ley de Protección de Datos.</p>
+            </div>
+            <div
+                class="glass-card p-10 rounded-3xl flex flex-col gap-8 border-transparent hover:border-orange-500 transition-all group">
+                <span class="material-symbols-outlined text-orange-500 text-5xl">assignment_turned_in</span>
+                <h3 class="text-2xl font-bold">Cumplimiento ANCI</h3>
+                <p class="text-lg text-slate-300 leading-relaxed">Respuesta integral a Instrucciones Técnicas y
+                    estándares de la autoridad nacional.</p>
+            </div>
+        </div>
+    </section>
 
-                            return {
-                                uid: `task-${index}`,
-                                id: row.querySelector('.cell-RF\\=o')?.innerText.trim() || 'S/N',
-                                name: name,
-                                section: cleanSection,
-                                isAnci: cleanSection.toUpperCase().includes('ANCI'),
-                                start: row.querySelector('.cell-uvVX')?.innerText.trim().replace('@', '') || 'Pendiente',
-                                end: row.querySelector('.cell-ejSF')?.innerText.trim().replace('@', '') || 'Pendiente',
-                                priority: row.querySelector('.cell-rVR\\@')?.innerText.trim() || 'Normal',
-                                ref: row.querySelector('.cell-_sWp')?.innerText.trim() || 'No especificada',
-                                instrument: row.querySelector('.cell-zVh\\[')?.innerText.trim() || 'No definido',
-                                desc: row.querySelector('.cell-Q\\{I\\;')?.innerText.trim() || 'Sin descripción técnica disponible.'
-                            };
-                        }).filter(Boolean);
+    <section class="py-40 bg-slate-900/40" id="fases">
+        <div class="max-w-7xl mx-auto px-10">
+            <h2 class="text-5xl font-extrabold mb-24 tracking-tight text-center md:text-left">Fases de Implementación
+            </h2>
+            <div class="relative space-y-16">
+                <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-slate-700 md:-translate-x-1/2"></div>
 
-                        setActivities(data);
-                        setLoading(false);
-                    } catch (err) {
-                        console.error(err);
-                        setLoading(false);
-                    }
-                };
-                loadData();
-            }, []);
-
-            const menuItems = useMemo(() => {
-                const sections = [...new Set(activities.map(a => a.section))];
-                return ['Todos', ...sections.sort()];
-            }, [activities]);
-
-            const filtered = filter === 'Todos' ? activities : activities.filter(a => a.section === filter);
-
-            if (loading) return <div className="h-screen flex items-center justify-center font-black text-slate-400">CARGANDO...</div>;
-
-            return (
-                <div className="max-w-[1400px] mx-auto p-6 md:p-12 lg:p-16">
-                    {/* Header Principal */}
-                    <header className="mb-12">
-                        <div className="flex items-center gap-4 mb-4">
-                            <span className="h-1 w-16 bg-blue-700 rounded-full"></span>
-                            <span className="text-blue-700 font-black text-xs uppercase tracking-[0.4em]">Hoja de Ruta 2026</span>
-                        </div>
-                        <h1 className="text-6xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.85]">
-                            Ciberseguridad<br/><span className="text-blue-700 italic">HOSMET</span>
-                        </h1>
-                    </header>
-
-                    {/* Menú Principal - Mejora de contraste y tamaño */}
-                    <nav className="flex flex-wrap gap-x-10 gap-y-6 mb-16 border-b-2 border-slate-200 pb-10 overflow-x-auto custom-scroll">
-                        {menuItems.map(item => (
-                            <button
-                                key={item}
-                                onClick={() => setFilter(item)}
-                                className={`text-sm font-black uppercase tracking-[0.15em] transition-all whitespace-nowrap ${
-                                    filter === item 
-                                    ? 'text-blue-700 border-b-4 border-blue-700 pb-2' 
-                                    : 'text-slate-500 hover:text-slate-900'
-                                }`}
-                            >
-                                {item}
-                            </button>
-                        ))}
-                    </nav>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                        {/* Listado Central */}
-                        <div className="lg:col-span-7 space-y-6 max-h-[850px] overflow-y-auto pr-6 custom-scroll">
-                            {filtered.map((task) => (
-                                <div 
-                                    key={task.uid}
-                                    onClick={() => setSelectedTask(task)}
-                                    className={`task-card p-8 rounded-[2rem] cursor-pointer border-2 shadow-md ${
-                                        selectedTask?.uid === task.uid 
-                                        ? 'border-blue-600 bg-blue-50/50' 
-                                        : 'border-white bg-white hover:border-blue-200 shadow-slate-200/50'
-                                    } ${task.isAnci ? 'section-urgent' : ''}`}
-                                >
-                                    <div className="flex justify-between items-start mb-5">
-                                        <span className="bg-slate-900 text-white text-[10px] font-black px-3 py-1.5 rounded-lg tracking-wider">
-                                            {task.id}
-                                        </span>
-                                        <span className={`text-xs font-black px-4 py-1.5 rounded-full border-2 ${
-                                            task.isAnci ? 'bg-red-100 text-red-700 border-red-200' : 'bg-slate-50 text-slate-700 border-slate-100'
-                                        }`}>
-                                            {task.isAnci ? 'URGENTE / ANCI' : task.priority}
-                                        </span>
-                                    </div>
-                                    <h3 className="text-2xl font-black text-slate-900 leading-tight mb-6">
-                                        {task.name}
-                                    </h3>
-                                    <div className="flex gap-8 text-xs font-bold text-slate-500 uppercase tracking-widest">
-                                        <span className="flex items-center gap-2 text-blue-700"><i className="far fa-calendar-alt"></i> {task.start}</span>
-                                        <span className="flex items-center gap-2"><i className="fas fa-flag-checkered"></i> {task.end}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Detalle Lateral - Mejora de jerarquía y legibilidad */}
-                        <div className="lg:col-span-5">
-                            {selectedTask ? (
-                                <div className="detail-appear sticky top-12 bg-white rounded-[3rem] p-12 shadow-2xl shadow-slate-300/40 border border-white">
-                                    <div className="mb-12">
-                                        <div className="flex items-center gap-3 mb-8">
-                                            <span className="h-3 w-3 bg-blue-600 rounded-full animate-pulse"></span>
-                                            <span className="text-xs font-black text-blue-600 uppercase tracking-[0.3em]">Auditoría de Actividad</span>
-                                        </div>
-                                        <h2 className="text-4xl font-black text-slate-900 leading-[1.1] mb-10 tracking-tight">{selectedTask.name}</h2>
-                                        <p className="text-slate-700 text-lg leading-relaxed font-medium">
-                                            {selectedTask.desc}
-                                        </p>
-                                    </div>
-
-                                    <div className="space-y-12">
-                                        <div>
-                                            <h4 className="text-xs font-black text-slate-400 uppercase mb-4 tracking-[0.2em]">Referencia Normativa</h4>
-                                            <p className="text-lg font-bold text-slate-900 leading-snug">{selectedTask.ref}</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <h4 className="text-xs font-black text-slate-400 uppercase mb-4 tracking-[0.2em]">Instrumento de Medición</h4>
-                                            <p className="text-lg font-bold text-slate-900 leading-snug">{selectedTask.instrument}</p>
-                                        </div>
-
-                                        <div className="pt-10 border-t-2 border-slate-100 flex items-center justify-between">
-                                            <div>
-                                                <h4 className="text-xs font-black text-slate-400 uppercase mb-2 tracking-[0.2em]">Categoría Técnica</h4>
-                                                <p className={`text-sm font-black uppercase tracking-widest ${selectedTask.isAnci ? 'text-red-600' : 'text-blue-700'}`}>
-                                                    {selectedTask.section}
-                                                </p>
-                                            </div>
-                                            <div className="h-16 w-16 rounded-[1.5rem] bg-slate-900 flex items-center justify-center text-white shadow-lg">
-                                                <i className="fas fa-shield-alt text-2xl"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="h-full min-h-[500px] flex flex-col items-center justify-center p-16 bg-white/50 rounded-[3rem] border-4 border-dashed border-slate-200 text-slate-400 text-center">
-                                    <i className="fas fa-fingerprint text-8xl mb-10 opacity-10"></i>
-                                    <p className="text-sm font-black uppercase tracking-[0.5em] leading-loose">
-                                        Selecciona una actividad<br/>para revisión técnica
-                                    </p>
-                                </div>
-                            )}
-                        </div>
+                <div class="relative pl-16 md:pl-0 md:grid md:grid-cols-2 gap-20 items-start">
+                    <div class="md:text-right">
+                        <h3 class="text-3xl font-black mb-6 text-[var(--neon-blue)] uppercase tracking-tighter">
+                            Gobernanza y Cumplimiento</h3>
+                        <details class="glass-card p-8 rounded-2xl group cursor-pointer border-slate-700/50">
+                            <summary class="flex items-center justify-between md:flex-row-reverse gap-4">
+                                <span class="text-xl font-bold text-slate-200">Detalles Técnicos</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 text-2xl group-open:rotate-180 transition-transform">expand_more</span>
+                            </summary>
+                            <div class="pt-6 text-lg text-slate-300 text-left md:text-right space-y-3">
+                                <p>• Formalización CISO y Enlace ante ANCI</p>
+                                <p>• Revisión y Firma Política de Seguridad</p>
+                                <p>• Vetting de Compras Tecnológicas</p>
+                            </div>
+                        </details>
                     </div>
-
-                    <footer className="mt-24 text-center pb-12">
-                        <span className="text-xs font-black text-slate-400 uppercase tracking-[1em]">HOSMET • 2026</span>
-                    </footer>
+                    <div class="hidden md:block"></div>
+                    <div
+                        class="absolute left-6 md:left-1/2 w-6 h-6 rounded-full bg-[var(--neon-blue)] -translate-x-1/2 top-2 shadow-[0_0_20px_rgba(0,242,255,0.8)]">
+                    </div>
                 </div>
-            );
-        };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+                <div class="relative pl-16 md:pl-0 md:grid md:grid-cols-2 gap-20 items-start">
+                    <div class="hidden md:block"></div>
+                    <div>
+                        <h3 class="text-3xl font-black mb-6 text-[var(--emerald-green)] uppercase tracking-tighter">
+                            Gestión de Activos y Riesgos</h3>
+                        <details class="glass-card p-8 rounded-2xl group cursor-pointer border-slate-700/50">
+                            <summary class="flex items-center justify-between gap-4">
+                                <span class="text-xl font-bold text-slate-200">Detalles Técnicos</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 text-2xl group-open:rotate-180 transition-transform">expand_more</span>
+                            </summary>
+                            <div class="pt-6 text-lg text-slate-300 space-y-3">
+                                <p>• Inventario Crítico de Activos IC01</p>
+                                <p>• Clasificación de Datos Sensibles Clínicos</p>
+                                <p>• Auditoría de Terceros Accesos Remotos</p>
+                            </div>
+                        </details>
+                    </div>
+                    <div
+                        class="absolute left-6 md:left-1/2 w-6 h-6 rounded-full bg-[var(--emerald-green)] -translate-x-1/2 top-2 shadow-[0_0_20px_rgba(16,185,129,0.8)]">
+                    </div>
+                </div>
+
+                <div class="relative pl-16 md:pl-0 md:grid md:grid-cols-2 gap-20 items-start">
+                    <div class="md:text-right">
+                        <h3 class="text-3xl font-black mb-6 text-slate-300 uppercase tracking-tighter">Infraestructura y
+                            Resiliencia</h3>
+                        <details class="glass-card p-8 rounded-2xl group cursor-pointer border-slate-700/50">
+                            <summary class="flex items-center justify-between md:flex-row-reverse gap-4">
+                                <span class="text-xl font-bold text-slate-200">Detalles Técnicos</span>
+                                <span
+                                    class="material-symbols-outlined text-slate-400 text-2xl group-open:rotate-180 transition-transform">expand_more</span>
+                            </summary>
+                            <div class="pt-6 text-lg text-slate-300 text-left md:text-right space-y-3">
+                                <p>• Validación de Respaldo Inmutable WORM</p>
+                                <p>• Simulacro de Continuidad "Modo Papel"</p>
+                            </div>
+                        </details>
+                    </div>
+                    <div class="hidden md:block"></div>
+                    <div
+                        class="absolute left-6 md:left-1/2 w-6 h-6 rounded-full bg-slate-500 -translate-x-1/2 top-2 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-40 px-10 max-w-7xl mx-auto" id="matriz">
+        <div class="glass-card p-12 rounded-[3rem] border-slate-700 overflow-hidden">
+            <h2 class="text-4xl font-extrabold mb-12">Matriz de Instrumentos</h2>
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-slate-700 text-slate-400 text-xs font-black uppercase tracking-[0.2em]">
+                        <th class="pb-8 pl-6 w-1/4">Código (Enlace)</th>
+                        <th class="pb-8 w-1/2">Nombre del Instrumento</th>
+                        <th class="pb-8 text-right pr-6 w-1/4">Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60">
+                    <script>
+                        const instrumentos = [
+                            { id: "HDAPI01-G", url: "https://docs.google.com/document/d/1YSfJsGZAKGO__7uAO-vqhMKlYFIbNGgcZ5mshFFxPPQ/edit?usp=drivesdk", title: "Guía Técnica: Hardening de APIs", desc: "Una guía técnica establece el sustento normativo y técnico para el hardening de APIs en la integración de sistemas del sector salud." },
+                            { id: "PI01", url: "https://docs.google.com/document/d/1pqkv09xWQREZYJV5FS7O6Hs9CZmQknqHcqSx4veXD1c/edit?usp=drivesdk", title: "Plan de Inversión y Gasto Ciberseguridad Hospitalaria", desc: "Un plan de inversión y gasto en ciberseguridad hospitalaria detalla una estrategia escalonada para fortalecer la infraestructura tecnológica de HOSMET." },
+                            { id: "IC01", url: "https://docs.google.com/spreadsheets/d/1lsMb-JPbOQQFxKrhaO0wPr1F1Vgkm2ZV36n3MNTWpOw/edit?usp=drivesdk", title: "Instrumento: Inventario Crítico de Activos (Matriz de Activos Asistenciales)", desc: "El documento establece una matriz de inventario crítico para identificar y clasificar activos tecnológicos y biomédicos asistenciales." },
+                            { id: "VT01", url: "https://docs.google.com/document/d/1u8Vo5qlmv6HClSVj_dTc6nDgPfwTQIGPcCSXxEsQADA/edit?usp=drivesdk", title: "Vetting", desc: "Un cuestionario de seguridad para adquisiciones evalúa obligatoriamente a proveedores de software, hardware médico y servicios de datos para el Hospital Metropolitano, asegurando el cumplimiento de estándares críticos." },
+                            { id: "EVEA01", url: "https://docs.google.com/document/d/17tuktc4RYvzO-snn43sc4zKfPAnHpgvyyfO0ILBUdtY/edit?usp=drivesdk", title: "Checklist evaluacion basica estado ciberseguridad", desc: "Un instrumento técnico evalúa el estado inicial de ciberseguridad de una organización, sirviendo como base para su plan estratégico 2026." },
+                            { id: "HDAPI01", url: "https://docs.google.com/document/d/1q8620MtJBzh-6aApazj0EnpiNt58ofrlhNyHCtBq7GU/edit?usp=drivesdk", title: "Hardening APIs", desc: "El documento establece los requisitos técnicos para el diseño y consumo seguro de APIs externas de HOSMET, alineándose con normativas clave como ITS-NC-007 y la Ley 2." },
+                            { id: "CCHG01", url: "https://docs.google.com/document/d/1nq_xhpWKuY-58IkHX1mGSBvWFbH-jWhq1KzW17DzB7g/edit?usp=drivesdk", title: "Campañas Ciber higiene", desc: "El documento técnico establece campañas de ciberhigiene fundamentales para educar al personal y fortalecer la postura de seguridad organizacional." },
+                            { id: "AX01", url: "https://docs.google.com/document/d/1oUabYAQGh4e2fN22y-xPXUOjRRaQSUJ9PFZ99wCeBEA/edit?usp=drivesdk", title: "Anexo Tecnico y Glosario del Plan Operativo PO01", desc: "Este anexo técnico complementa el Plan Operativo de ciberseguridad de un hospital, detallando conceptos y procedimientos para proteger la salud de los pacientes." },
+                            { id: "CLEM01", url: "https://docs.google.com/document/d/1bCpoJQlAwpJhVKG_XP74mua9pc541xYZSzUOgAO2ZmY/edit?usp=drivesdk", title: "Checklist software y equipos medicos stand-alone", desc: "Un protocolo de ciberseguridad establece directrices para estandarizar la seguridad de software y equipos médicos autónomos, no integrados al Registro Clínico Electrónico, con el fin de mit." },
+                            { id: "PO01", url: "https://docs.google.com/document/d/1N5XWI1RYeiobigCWf-QKNFQ_YScYWo4VdqepSaDCITw/edit?usp=drivesdk", title: "Plan Operativo Ciberseguidad", desc: "El documento es una hoja de ruta esquematizada para la implementación de obligaciones normativas en ciberseguridad y protección de datos en un hospital de alta complejidad. Aborda la gobernanza, gestión de activos y riesgos, e implementa controles técnicos como hardening, MFA, micro-segmentación y respaldos inmutables, alineándose con normativas como ANCI e ISO 27001. Su valor estratégico radica en disminuir riesgos de discontinuidad asistencial, asegurar la integridad de la información clínica y proteger la privacidad del paciente, garantizando la resiliencia operativa." },
+                            { id: "IF0.2", url: "https://docs.google.com/document/d/1no3l28hCGranppL6I3faPNcs8vfTpdMVNW0wQhtOJDU/edit?usp=drivesdk", title: "Instrumento: Higiene de Identidades", desc: "El documento establece un procedimiento obligatorio para el saneamiento semestral de identidades y accesos, mitigando el riesgo de uso no autorizado de credenciales institucionales." },
+                            { id: "LC02", url: "https://docs.google.com/spreadsheets/d/17fQvslm2p1LW8Rxph1OEYn48WRJFwTQF8KQRymBPaAo/edit?usp=drivesdk", title: "Instrumento: Lista de Chequeo para Actualización de Convenios (Cumplimiento Res. 850)", desc: "Una lista de chequeo técnica evalúa y actualiza convenios con proveedores de servicios TI, funcionando como un análisis de brechas para asegurar el cumplimiento de la Resolución 850." }
+                        ];
+
+                        document.write(instrumentos.map(ins => `
+                            <tr>
+                                <td class="py-8 pl-6 font-mono">
+                                    <a href="${ins.url}" target="_blank" class="inst-link text-[var(--neon-blue)] text-xl font-bold">${ins.id}</a>
+                                </td>
+                                <td class="py-8">
+                                    <details class="group">
+                                        <summary class="text-xl font-bold cursor-pointer hover:text-[var(--neon-blue)] flex items-center gap-3">
+                                            ${ins.title} <span class="material-symbols-outlined text-lg group-open:rotate-180 transition-transform">expand_more</span>
+                                        </summary>
+                                        <div class="mt-6 text-lg text-slate-300 leading-relaxed bg-black/30 p-8 rounded-2xl border border-white/5">${ins.desc}</div>
+                                    </details>
+                                </td>
+                                <td class="py-8 text-right pr-6"><span class="px-5 py-2 rounded-xl bg-emerald-500/10 text-[var(--emerald-green)] text-xs font-black uppercase tracking-widest border border-emerald-500/30">Elaborado</span></td>
+                            </tr>
+                    `).join(''));
+                    </script>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="py-40 px-10 max-w-7xl mx-auto mb-20" id="cronograma">
+        <div class="flex flex-col items-center mb-24">
+            <h2 class="text-5xl font-extrabold mb-6 tracking-tight">Cronograma H1 2026</h2>
+            <div class="h-1.5 w-32 bg-[var(--neon-blue)] rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center text-slate-200">
+            <div class="glass-card rounded-[2.5rem] p-12 border-l-8 border-l-[var(--neon-blue)]">
+                <h5 class="text-sm font-black text-slate-500 uppercase mb-6">Marzo</h5>
+                <p class="text-xl font-bold">Gobernanza Inicial</p>
+            </div>
+            <div class="glass-card rounded-[2.5rem] p-12 border-l-8 border-l-[var(--emerald-green)]">
+                <h5 class="text-sm font-black text-slate-500 uppercase mb-6">Abril</h5>
+                <p class="text-xl font-bold">Gestión de Activos</p>
+            </div>
+            <div class="glass-card rounded-[2.5rem] p-12 border-l-8 border-l-amber-500">
+                <h5 class="text-sm font-black text-slate-500 uppercase mb-6">Mayo - Junio</h5>
+                <p class="text-xl font-bold">Resiliencia Operativa</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black/60 py-20 border-t border-slate-900 text-center">
+        <p class="text-sm text-slate-500 font-mono tracking-[0.3em] uppercase">Guido Corral A. | CISO HOSMET | Versión
+            Auditorio 2026</p>
+    </footer>
+
 </body>
-</html>
 
+</html>
